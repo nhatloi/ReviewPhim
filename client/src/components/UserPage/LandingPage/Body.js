@@ -10,16 +10,11 @@ import ResetPassword from '../../auth/ResetPassword'
 import Notfound from '../../utils/Notfound'
 import Profile from '../View/Profile'
 import Successfully from '../../utils/Successfully'
-import Test from '../View/Test'
-import InTheatersPage from '../View/InTheater/InTheatersPage'
-import InTheatersDetail from '../View/InTheater/InTheatersDetail'
 import News from '../View/News/NewsPage'
 import Home from '../View/Home'
 import Header from './Header'
 import Footer from './Footer'
 import MovieDetail from '../View/MovieDetail'
-import BookTicket from '../View/BookTicket'
-import BookTicketbyMovie from '../View/BookTicketbyMovie'
 import Totalmovie from '../View/Totalmovie'
 
 
@@ -50,16 +45,11 @@ function Body() {
 
                         {/* no need to login */}
                         <Route exact path="/user/activation/:activation_token" component={ActiveEmail}/>
-                        <Route exact path="/test" component={Test}/>
-                        <Route exact path="/intheaters/:query" component={InTheatersPage}/>
-                        <Route exact path="/intheaters/detail/:nameMovie" component={InTheatersDetail}/>
-
                         {/* News */}
                         <Route exact path="/news" component={News}/>
                         {/* Movie */}
                         <Route exact path="/movie/:id" component={MovieDetail}/>
-                        <Route exact path="/bookticket/" component={BookTicket}/>
-                        <Route exact path="/bookticket/:id" component={BookTicketbyMovie}/>
+
                         <Route exact path="/movie/total/:key" component={Totalmovie}/>
 
 

@@ -1,4 +1,4 @@
-import React,{useState,useEffect}from 'react'
+import React, {useState,useEffect}from 'react'
 import ReactPlayer from 'react-player/youtube'
 import axios from 'axios'
 import {useSelector} from 'react-redux'
@@ -16,6 +16,7 @@ function MovieDetail(props) {
     //const
     const id = props.match.params.id
     const [movie, setmovie] = useState([])
+    const [likes, setlikes] = useState([])
     const auth = useSelector(state => state.auth)
 
     const CommentList = ({ comments }) => (
@@ -70,7 +71,8 @@ function MovieDetail(props) {
         try {
             const res = await axios.get(`/movie/getmoviebyid/${id}`)
             setmovie(res.data)
-            
+            const res2 = await axios.get('/like/getLikes/',{headers:{videoId:res.data._id}})
+            setlikes(res2.likes)
         } catch (err) {
            return;
         }
@@ -95,7 +97,6 @@ function MovieDetail(props) {
                 <Button>Like<LikeOutlined /></Button><p/>
                 {/* <DislikeOutlined /> */}
                 <a href="#trailer"><PlayCircleOutlined/> View Trailer</a><p/>
-                <a href={`/bookticket/${id}`}>Book tickets</a>
                 </p>
                 <img style={{height:"500px",width:"300px",opacity:'1',float:'right'}} src={movie.poster_path}/>
             </div>

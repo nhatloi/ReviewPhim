@@ -4,13 +4,15 @@ const { Dislike } = require("../models/Dislike");
 
 const likeCtrl = {
     GetLikes : async (req,res) =>{
+        const videoId = req.header("videoId")
+        const commentId = req.header("commentId")
         try {
             let variable = {}
-            if (req.body.videoId) {
-                variable = { videoId: req.body.videoId }
+            if (videoId) {
+                variable = { videoId: videoId }
             } else {
-                if (!req.body.commentId) return res.status(500).json({msg:false})
-                variable = { commentId: req.body.commentId }
+                if (!commentId) return res.status(500).json({msg:false})
+                variable = { commentId: commentId }
             }
 
             Like.find(variable)

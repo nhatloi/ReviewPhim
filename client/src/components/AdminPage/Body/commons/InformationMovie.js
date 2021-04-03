@@ -12,7 +12,7 @@ function InformationMovie(props) {
     const {data, custom} = props
     const token = useSelector(state => state.token)
     const [movie, setmovie] = useState()
-    const dateFormat = 'YYYY/MM/DD';
+    const dateFormat = 'DD/MM/YYYY';
     const [posterImg, setposterImg] = useState('')
     const [bannerImg, setbannerImg] = useState('')
 
@@ -60,7 +60,20 @@ function InformationMovie(props) {
     
     const onFinish = async(e) =>{
         try{
-            const res = await axios.post('/movie/addmovie/',{movie:e},
+            const mov={
+                title:e.title,
+                backdrop_path:bannerImg?bannerImg:movie.backdrop_path,
+                directors:e.directors,
+                actors:e.actors,
+                original_title:e.original_title,
+                overview:e.overview,
+                poster_path:posterImg?posterImg:movie.poster_path,
+                release_date:e.release_date,
+                run_time:e.run_time,
+                trailer:e.trailer,
+            }
+            
+            const res = await axios.post('/movie/addmovie/',{movie:mov},
                 {headers:{Authorization:token}
             })
             message.success(res.data.msg)
@@ -88,10 +101,6 @@ function InformationMovie(props) {
             const res = await axios.post('/movie/addmovie/',{movie:movie},
                 {headers:{Authorization:token}
             })
-            //message.success(res.data.msg)
-
-            console.log(movie)
-            console.log(res.data.msg)
 
         }catch (error) {
             message.error('add failed!');
@@ -368,11 +377,12 @@ function InformationMovie(props) {
                         <Form.Item name="overview" label="Overview">
                             <TextArea rows={4} />
                         </Form.Item>
-                            <Form.Item
+                        <Form.Item
                                 name="poster_path"
                                 label="Poster"
                             >
-                                <img alt='' src = {movie.poster_path?movie.poster_path:null} style={{height:'300px'}}/>
+                                <img style={{height:"300px"}} alt="poster" src={posterImg?posterImg:movie.poster_path}/>
+                                <Input type='file' id='poster' onChange={upImage}/>
                             </Form.Item>
                         <Form.Item
                                 name="trailer"
@@ -382,8 +392,9 @@ function InformationMovie(props) {
                             </Form.Item>
 
 
-                        <Form.Item label="Backdrop" name='backdrop_path'>
-                            <img alt='' src = {movie.backdrop_path?movie.backdrop_path:null} style={{width:'100%'}}/>
+                            <Form.Item label="Backdrop" name='backdrop_path'>
+                            <img style={{width:"100%"}} alt="banner" src={bannerImg?bannerImg:movie.backdrop_path}/>
+                            <input type='file' id='banner' onChange={upImage}/>
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ span: 12, offset: 6 }}>

@@ -1,7 +1,7 @@
 const router= require('express').Router()
 const likeCtrl = require('../controllers/likeCtrl')
 
-router.post('/getLikes', likeCtrl.GetLikes)
+router.get('/getLikes', likeCtrl.GetLikes)
 router.post("/upLike",likeCtrl.Uplike )
 router.post("/unLike", likeCtrl.Unlike )
 router.post("/upDisLike",likeCtrl.Updislike )

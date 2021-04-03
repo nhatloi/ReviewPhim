@@ -13,8 +13,11 @@ const fetchData = async(url) =>{
 
 const ReviewCtrl = {
     GetReviews : async (req,res) =>{
+        const page = req.header("page")
+
+
        try{
-            const content = await fetchData(url)
+            const content = await fetchData(`${url}page/${page}/`)
             const $ =cheerio.load(content)
             const reviews=[]
 
@@ -32,11 +35,11 @@ const ReviewCtrl = {
             res.json({msg:reviews})
         } catch (error) {
             return res.status(500).json({msg: error.message})
-        }    
+        }
     },
     GetDetailReview : async (req,res) =>{
+        const url = req.header("url")
         try{
-            const url = req.header("url")
             const content = await fetchData(url)
             const $ =cheerio.load(content)
             let review = {
@@ -58,27 +61,15 @@ const ReviewCtrl = {
                 review.content.push(`img src= '${$(e).find('img').attr('src')}'`);
             })
             const stopwords = fs.readFileSync('stopwords.txt');
-            // fs.readFile('stopwords.txt', 'Hoc Node.js co ban.',  function(err,data) {
-
-            //     if (err) {
-            //         return console.error(err);
-            //     }
-            //  });
-
-            var returnUnstemmedWords = true; //default true - return the words in their unstemmed format [the first unstemmed version encountered is the one returned]. note this is a "superficial" parameter -- all scoring is identical, only the labels are changed.
-            var doPostMultiply = true; //default true - multiple word scores by number of word appearances
+            var data = fs.readFileSync('stopwords.txt');
             
-            review.keywords = ws.getSalientWords(review.content.join(' '), returnUnstemmedWords, doPostMultiply).slice(0,5);
-            
-            // const keywords = generateKeywords(review.content.join(' '));
-            // review.keywords = clearKeywords(keywords, stopwords).slice(0,20);
+            const keywords = generateKeywords(review.content.join(' '));
+            review.keywords = clearKeywords(keywords, stopwords).slice(0,30);
              res.json({msg:review})
             } catch (error) {
              return res.status(500).json({msg: error.message})
          }    
      },
-
-
 
 }
 

@@ -1,6 +1,5 @@
 import React ,{useState,useEffect}from 'react'
-import { API_URL, API_KEY,LANGUAGE ,IMAGE_BASE_URL,POSTER_SIZE} from '../../../../Config'
-import { Row, Col,Input,Button, Radio ,Modal} from 'antd';
+import { Row, Col,Input,Button ,Modal} from 'antd';
 import axios from 'axios'
 import InformationMovie from './InformationMovie'
 import MovieCard from './MovieCard'
@@ -41,7 +40,7 @@ function AddNewMovie() {
         setsearch(true)
         const escapedValue = encodeURIComponent(props).replace('%20','+');
             try {
-                const res = await axios.get('/movie/searchthemoviedb', {headers:{key:escapedValue}})
+                const res = await axios.get('/movie/searchTheaters', {headers:{q:escapedValue}})
                 setMovies(res.data.movies)
             } catch (err) {
                return err.response.data.msg

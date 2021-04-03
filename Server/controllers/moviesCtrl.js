@@ -77,14 +77,13 @@ const moviesCtrl = {
           else  movie.trailer = 'https://www.youtube.com/watch?v=' + trailer
           movie.overview = body.find('p.text-justify').text();
     
-        $('.text-sm-left > span').each((i,e)=>{
-            if(i === 0){
-                var date = new Date($(e).text());
-                date.setHours(date.getHours()+7);
-                movie.release_date = date;
+        $('.text-sm-left').each((i,e)=>{
+            if($(e).find('strong >span').text() === 'Khởi chiếu'){
+
+                movie.release_date = $(e).find('>span').text();
             }
-            if(i === 1){
-                var value = $(e).text();
+            if($(e).find('strong >span').text() === 'Thời lượng'){
+                var value = $(e).find('>span').text();
                 var number = value.match(/\d/g);
                 number = number.join("");
                 movie.runtime = parseInt(number);
@@ -113,20 +112,19 @@ const moviesCtrl = {
     },
     SearchMovie : async (req,res) =>{
 
-        const url = req.header("url")
+        const query = req.header("q")
         const movies = []
         try {
-            const content = await fetchData(url)
+            const content = await fetchData(`https://moveek.com/tim-kiem/?s=${query}`)
             const $ =cheerio.load(content)
-            const tab_onshow = $('.slick-track')
             $('div.mb-4').each((i,e)=>{
                 const movie={
-                    img:'',
+                    poster_path:'',
                     title:'',
                     date:'',
                     linkmovie:'',
                 }
-                movie.img = $(e).find('a > img').attr('data-src');
+                movie.poster_path = $(e).find('a > img').attr('data-src');
                 movie.title = $(e).find('h3> a').attr('title');
                 movie.date = $(e).find('p.text-muted').text().trim();
             
@@ -141,104 +139,6 @@ const moviesCtrl = {
         }
         
     
-    },
-
-    MovieThemoviedb : async (req,res) =>{
-        const movies = []
-        try {
-            const url = `${THEMOVIEDBURL}movie/popular?api_key=${THEMOVIEDBKEY}&language=${LANGUAGE}`
-            const results = (await fetchData(url)).results
-            results.forEach(movie => {
-                const newMovie = {
-                    id:'',
-                    title:'',
-                    poster_path:'',
-                    release_date:'',
-                }
-                newMovie.id = movie.id
-                newMovie.poster_path =`${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`
-                newMovie.title = movie.original_title
-                newMovie.release_date = movie.release_date
-                movies.push(newMovie)
-              }); 
-
-            return res.json({movies})
-        } catch (error) {
-            return res.status(500).json({msg: error.message})
-        }
-        
-    
-    },
-    SearchThemoviedb : async (req,res) =>{
-        const movies = []
-        const key = req.header("key")
-        try {
-            const url = `${THEMOVIEDBURL}search/movie/?api_key=${THEMOVIEDBKEY}&language=${LANGUAGE}&query=${key}`
-            const results = (await fetchData(url)).results
-            results.forEach(movie => {
-                const newMovie = {
-                    id:'',
-                    title:'',
-                    poster_path:'',
-                    release_date:'',
-                }
-                newMovie.id = movie.id
-                newMovie.poster_path =`${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`
-                newMovie.title = movie.original_title
-                newMovie.release_date = movie.release_date
-                movies.push(newMovie)
-              }); 
-           return res.json({movies})
-        } catch (error) {
-            return res.status(500).json({msg: error.message})
-        }
-        
-    
-    },
-    MovieDetailThemoviedb : async (req,res) =>{
-        const movie_id = req.body.id
-        try {
-            const url = `${THEMOVIEDBURL}movie/${movie_id}?api_key=${THEMOVIEDBKEY}&language=${LANGUAGE}`
-            const results = (await fetchData(url))
-            const movie = {
-                original_title:'',
-                release_date:'',
-                runtime:'',
-                actors:[],
-                directors:[],
-                title:'',
-                overview:'',
-                poster_path:'',
-                trailer:'',
-                backdrop_path:'',
-            }
-            movie.original_title = results.original_title
-            movie.release_date = results.release_date
-            movie.runtime = results.runtime + 'P'
-            movie.title = results.title
-            movie.overview = results.overview
-            movie.poster_path =`${IMAGE_BASE_URL}${POSTER_SIZE}${results.poster_path}`
-            movie.backdrop_path = `${IMAGE_BASE_URL}${BACKDROP_SIZE}${results.backdrop_path}`
-            
-            const urlTrailer = `${THEMOVIEDBURL}movie/${movie_id}/videos?api_key=${THEMOVIEDBKEY}`
-            const keyTrailer = (await fetchData(urlTrailer)).results[0].key
-            movie.trailer = 'https://www.youtube.com/watch?v=' + keyTrailer
-
-            const urlCredits= `${THEMOVIEDBURL}movie/${movie_id}/credits?api_key=${THEMOVIEDBKEY}&language=${LANGUAGE}`
-            const credits = (await fetchData(urlCredits))
-            const actors = credits.cast
-            actors.forEach(actor => { 
-               movie.actors.push(actor.original_name)
-            }); 
-            const directors = credits.crew
-            directors.forEach(director => { 
-                if(director.department === 'Directing')
-                movie.directors.push(director.original_name)
-             }); 
-            return res.json({movie:movie})
-        } catch (error) {
-            return res.status(500).json({msg: error.message})
-        }
     },
     AddMovie : async (req,res) =>{
         try {
