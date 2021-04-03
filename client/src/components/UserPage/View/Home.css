@@ -1,0 +1,96 @@
+.home {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    margin: auto;
+    padding: 20px;
+    background:url('../../../access/images/background.jpg') no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+
+}
+.list-movie {
+    width: 400px;
+    text-align: center;
+}
+.list-movie h2{
+    font-size: 30px;
+    color: red;
+}
+
+.box{
+    min-width: 250px;
+    margin: 0 10px;
+    height: 100%;
+    position: relative;
+    box-shadow: 0 0 5px 2px #0003;
+    border-radius: 2px;
+}
+
+.box .detail {
+    background: cornflowerblue;
+    position: absolute;
+    color: white;
+    text-align:center;
+    width: 100%;
+    font-size: 120%;
+    text-shadow: -2px 2px 8px #888;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.box img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.box:hover .detail{
+    transform: translateY(0);
+}
+.trailer {
+    height: 600px;
+    width: 650px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 21px;
+    overflow: hidden;
+    margin-left: 10px;
+    color:slateblue;
+}
+
+.trailer .overview {
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 3s ease-in-out; 
+}
+.trailer:hover .overview {
+    transform: translateX(0);   
+}
+.news {
+    height: 100%;
+    width: 30%;
+    padding: 5px;
+    margin-left: 10px;
+    background: white;
+    overflow: auto;
+}
+
+.coming_soon {
+    background:url('../../../access/images/rapphim.jpeg') no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.coming_soon a{
+    color:linen;
+}
+.coming_soon h2{
+    
+    color:linen;
+}
+
+

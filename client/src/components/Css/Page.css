@@ -1,0 +1,273 @@
+/* forgot password form */
+.fg_pass{
+    text-align: center;
+}
+
+.fg_pass .fg_row{
+    padding: 10px;
+    margin: 5px;
+}
+.fg_pass .fg_row button{
+    background:black;
+    color: white;
+}
+
+.fg_pass .fg_row input{
+    margin: 10px;
+}
+
+/* Login form */
+
+.login-form{
+    width: 30vw;
+    margin: auto;
+}
+
+/* register form */
+.register-form {
+    width: 40%;
+    margin: auto;
+}
+.register-form h2{
+    color:white;
+    letter-spacing: 3px;
+}
+
+/* Profile page*/
+.recent-activity{
+    margin-left: 10px;
+    border: solid 2px #0b1413;
+    background: white;
+    margin-top: 10px;
+}
+.profile .recent-activity Card{
+    height: 100px;
+}
+
+.profile {
+   padding-left: 10vw;
+   min-width: max-content;
+}
+
+.profile .card {
+    width: 350px;
+    border: none;
+}
+
+.profile .card .banner{
+    width: 300px;
+    height:150px;
+    background-size: cover;
+    border-radius: 4px;
+}
+
+.profile .card .avatar{
+    width: 100px;
+    height: 100px;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.profile .infor {
+    transform: translateY(-60px);
+}
+.avatar img{
+    
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.card .avatar span{
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: #fff8;
+    text-align: center;
+    font-weight: 400;
+    color:blue;
+    transition: 0.3 ease-in-out;
+    text-transform: uppercase;
+}
+
+.card .avatar:hover span{
+    bottom: 0;
+}
+
+.card .avatar #file_up{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.profile label{
+    display: block;
+    text-transform:initial;
+}
+
+/* Home page*/
+.movies{
+    display: flex;
+    overflow-x: auto;
+    margin-top: 1em;
+    overflow-y: hidden;
+}
+
+.list-movies {
+    display: flex;
+    margin: auto;
+}
+.list-movies .card-movie{
+    height: 470px;
+    background: white;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1rem;
+    position: relative;
+}
+.list-movies .card-movie .movie-infor{
+    color: black;
+    margin-top: 10px;
+}
+.list-movies .card-movie img{
+    width: 100%;
+    height: 80%;
+}
+.list-movies .card-movie label{
+    position:absolute;
+    right: 0;
+    background: red;
+    bottom: 90px;
+}
+
+
+/* Movie detail page */
+
+.detail {
+    position: relative;
+    top: 0;
+}
+
+.movies-banner {
+    background:
+            linear-gradient(to bottom, rgba(0,0,0,0)
+            39%,rgba(0,0,0,0)
+            41%,rgba(0,0,0,0.65)
+            100%)
+            ;
+    height: 100%;
+    background-position: center center;
+    min-width:1000px;
+
+}
+
+.detail-banner img{
+    opacity: 0.5;
+    width: 100%;
+}
+.detail-card{
+    position:absolute;
+    left: 15%;
+    top: 10%;
+    height: 65%;
+    display: flex;
+    overflow: hidden;
+}
+
+.detail-card img{
+    height: 100%;
+    margin-right: 20px;
+}
+
+.detail-card span{
+    color: white;
+    font-size: 200%;
+    font-family:'Times New Roman', Times, serif;
+}
+.detail-card span Button{
+    position: absolute;
+    bottom: 0;
+    background: black;
+    height: 50px;
+
+}
+.detail-card span h1{
+    color: #5CA17C; /*non-webkit fallback*/
+    font-size: 50px;
+    text-transform: uppercase;
+    background-image: linear-gradient(to bottom, #e2fdf9, #000000, #20c91a, #a6bd26);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.player-wrapper {
+    width: 80vw;
+    height: 80vh;
+    padding: 10px;
+    background: black;
+    color: white;
+    margin: auto;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    visibility:hidden;
+}
+
+.player-wrapper label{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+}
+
+.actors{
+    width: 90%;
+    display: flex;
+    overflow-x: scroll;
+    padding: 10px;
+    margin: auto;
+}
+
+.free-movie{
+    color: white;
+    display: block;
+}
+.free-movie h2{
+    text-align: start;
+    margin-top: 20px;
+    color: white;
+    text-shadow: 2px 2px #ff0000;
+}
+.free-movie label{
+    display: flex;
+}
+.free-movie .movie-infor{
+    background-size:100% 100%;
+    height: 500px;
+}
+
+.free-movie .movie-infor .movie-overview{
+    overflow:auto;
+}
+
+.free-movie .movie-infor .episode-movie button{
+    width: 50px;
+    color: white;
+    background: black;
+    border-radius: 10px;
+    margin: 3px;
+    display: inline;
+}
+
