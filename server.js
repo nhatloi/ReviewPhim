@@ -23,6 +23,7 @@ app.use('/movie',require('./Server/router/moviesRouter'))
 app.use('/comment', require('./Server/router/comment'));
 app.use('/like', require('./Server/router/like'));
 app.use('/news', require('./Server/router/NewsRouter'));
+app.use('/review', require('./Server/router/ReviewRouter'));
 
 
 
