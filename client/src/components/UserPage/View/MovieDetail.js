@@ -17,6 +17,7 @@ function MovieDetail(props) {
     const id = props.match.params.id
     const [movie, setmovie] = useState([])
     const [likes, setlikes] = useState([])
+    const [liked, setliked] = useState(false)
     const auth = useSelector(state => state.auth)
 
     const CommentList = ({ comments }) => (
@@ -72,7 +73,7 @@ function MovieDetail(props) {
             const res = await axios.get(`/movie/getmoviebyid/${id}`)
             setmovie(res.data)
             const res2 = await axios.get('/like/getLikes/',{headers:{videoId:res.data._id}})
-            setlikes(res2.likes)
+            setlikes(res2.data.likes)
         } catch (err) {
            return;
         }
@@ -94,7 +95,7 @@ function MovieDetail(props) {
                 <p/>
                 {movie.overview}<p/>
                 <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
-                <Button>Like<LikeOutlined /></Button><p/>
+                <Button>Like<LikeOutlined />{likes.length}</Button><p/>
                 {/* <DislikeOutlined /> */}
                 <a href="#trailer"><PlayCircleOutlined/> View Trailer</a><p/>
                 </p>

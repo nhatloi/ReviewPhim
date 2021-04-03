@@ -6,6 +6,7 @@ const likeCtrl = {
     GetLikes : async (req,res) =>{
         const videoId = req.header("videoId")
         const commentId = req.header("commentId")
+        const UserId = req.header("UserId")
         try {
             let variable = {}
             if (videoId) {
