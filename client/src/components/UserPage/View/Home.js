@@ -3,7 +3,7 @@ import axios from 'axios'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import ReactPlayer from 'react-player/youtube'
-import { List, message, Avatar, Spin,Row,Col} from 'antd';
+import { List, Skeleton, Avatar,Row,Col} from 'antd';
 
 import './Home.css'
 
@@ -41,48 +41,56 @@ function Home() {
 
     return (
         <div>
-        <div className="home"> 
-            <div className="list-movie">
-                <Carousel verticalSwipe='natural' autoPlay={autoPlay} centerMode={true} infiniteLoop={true} onChange={handleChange}>
-                    {playNow && playNow.map((movie, index) => (
-                                        <div className="box">
-                                            <div className="detail">
-                                                <h2>{movie.title}</h2>
-                                                <p>{new Date(movie.release_date).toLocaleDateString()}</p>
-                                            </div>
-                                            <a alt="movie-detail" href={`/movie/${movie._id}`}><img src={movie.poster_path} /></a>
-                                        </div>
-                                            ))}
-                </Carousel>
-                <a href='/movie/total/playing_now'><h2> Now Playing</h2></a>
-            </div>
-            <div className='trailer'>
-                <ReactPlayer url={movieFocus.trailer} onPlay={()=>{setautoPlay(false)}} onPause={()=>{setautoPlay(true)}}/>
-                <div className='overview' >{movieFocus.overview}</div>
-            </div>
-            <div className="news">
-                <List
-                    dataSource={News}
-                    renderItem={item => (
-                    <List.Item key={item.description}>
-                        <List.Item.Meta
-                        avatar={
-                            <Avatar src={item.img} />
-                        }
-                        title={<a href={item.link}>{item.description}</a>}
-                        description={`${item.source} - ${item.time}`}
-                        />
-                    </List.Item>
-                    )}
-                >
-                    
-                </List>
-            </div>
-            </div>
+            {
+                !playNow.length? <div><Skeleton loading={true}/><Skeleton loading={true}/><Skeleton loading={true}/><Skeleton loading={true}/></div>
+                :
+                    <div className="home"> 
+                    <div className="list-movie">
+                        <Carousel verticalSwipe='natural' autoPlay={autoPlay} centerMode={true} infiniteLoop={true} onChange={handleChange}>
+                            {playNow && playNow.map((movie, index) => (
+                                                <div className="box">
+                                                    <div className="detail">
+                                                        <h2>{movie.title}</h2>
+                                                        <p>{new Date(movie.release_date).toLocaleDateString()}</p>
+                                                    </div>
+                                                    <a alt="movie-detail" href={`/movie/${movie._id}`}><img src={movie.poster_path} /></a>
+                                                </div>
+                                                    ))}
+                        </Carousel>
+                        <a href='/movie/total/playing_now'><h2> Now Playing</h2></a>
+                    </div>
+                    <div className='trailer'>
+                        <ReactPlayer url={movieFocus.trailer} onPlay={()=>{setautoPlay(false)}} onPause={()=>{setautoPlay(true)}}/>
+                        <div className='overview' >{movieFocus.overview}</div>
+                    </div>
+                    <div className="news">
+                        <List
+                            dataSource={News}
+                            renderItem={item => (
+                            <List.Item key={item.description}>
+                                <List.Item.Meta
+                                avatar={
+                                    <Avatar src={item.img} />
+                                }
+                                title={<a href={item.link}>{item.description}</a>}
+                                description={`${item.source} - ${item.time}`}
+                                />
+                            </List.Item>
+                            )}
+                        >
+                            
+                        </List>
+                    </div>
+                    </div>
+            }
+        
             
             <div className="coming_soon">
                 <a href='/movie/total/comingsoon'><h2>Coming Soon</h2></a>
-            <Row gutter={[8, 8]}>
+                {
+                    comingSoon.length?
+                    <div>
+                        <Row gutter={[8, 8]}>
                         {comingSoon && comingSoon.map((movie, index) => (
                             <React.Fragment key={index}>
                                <Col span={6} >
@@ -103,7 +111,11 @@ function Home() {
                             </React.Fragment>
                                 
                         ))}
-                </Row>
+                        </Row>
+                    </div>
+                        :<Skeleton loading={true}/>
+                }
+            
             </div>
         </div>
     )
