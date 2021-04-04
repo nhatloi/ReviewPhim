@@ -3,9 +3,14 @@ import { Comment, Avatar, Button, Input } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import LikeDislikes from './LikeDislikes';
+import { DeleteOutlined} from '@ant-design/icons';
+
+
 const { TextArea } = Input;
 function SingleComment(props) {
     const user = useSelector(state => state.auth.user);
+    const token = useSelector(state => state.token)
+    const isLogged = useSelector(state => state.auth.isLogged)
     const [CommentValue, setCommentValue] = useState("")
     const [OpenReply, setOpenReply] = useState(false)
 
@@ -17,7 +22,22 @@ function SingleComment(props) {
         setOpenReply(!OpenReply)
     }
 
+    const openRemove = async(e) => {
+        try {
+           const res = await Axios.post('/comment/removeComment', {commentId:props.comment._id},{headers:{Authorization:token}})
+           props.refreshFunction()
+           return alert(res.data.msg);
+
+        } catch (error) {
+            alert('Failed to save Comment')
+        }
+    }
+
     const onSubmit = (e) => {
+
+        if (!isLogged) {
+            return alert('Please Log in first');
+        }
         e.preventDefault();
 
         const variables = {
@@ -25,17 +45,16 @@ function SingleComment(props) {
             postId: props.postId,
             responseTo: props.comment._id,
             content: CommentValue,
-            namme:props.comment.writer.name
+            name:props.comment.writer.name
         }
-        console.log(variables)
 
 
-        Axios.post('/comment/saveComment', variables)
+        Axios.post('/comment/saveComment', {comment:variables},{headers:{Authorization:token}})
             .then(response => {
                 if (response.data.success) {
                     setCommentValue("")
                     setOpenReply(!OpenReply)
-                    props.refreshFunction(response.data.result)
+                    props.refreshFunction()
                 } else {
                     alert('Failed to save Comment')
                 }
@@ -44,7 +63,8 @@ function SingleComment(props) {
 
     const actions = [
         <LikeDislikes comment commentId={props.comment._id} userId={user._id} />,
-        <span onClick={openReply} key="comment-basic-reply-to">Reply to </span>
+        <span onClick={openReply} key="comment-basic-reply-to">Reply to </span>,
+        <span onClick={openRemove} key="remove">{props.comment.writer._id === user._id?<DeleteOutlined />:null}</span>,
     ]
 
     return (
@@ -54,7 +74,7 @@ function SingleComment(props) {
                 author={props.comment.writer.name}
                 avatar={
                     <Avatar
-                        src={props.comment.writer.image}
+                        src={props.comment.writer.avatar}
                         alt="image"
                     />
                 }

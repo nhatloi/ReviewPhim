@@ -19,14 +19,7 @@ function MovieDetail(props) {
     const id = props.match.params.id
     const [movie, setmovie] = useState([])
     const [CommentLists, setCommentLists] = useState([])
-    const [likes, setlikes] = useState([])
-    const auth = useSelector(state => state.auth)
     const user = useSelector(state => state.auth.user)
-
-
-    const updateComment = (newComment) => {
-      setCommentLists(CommentLists.concat(newComment))
-  }
 
     useEffect(() => {
         fetchData();
@@ -39,9 +32,7 @@ function MovieDetail(props) {
             setmovie(res.data)
             axios.post('/comment/getComments', { movieId: res.data._id})
             .then(response => {
-                console.log(response)
                 if (response.data.success) {
-                    console.log('response.data.comments', response.data.comments)
                     setCommentLists(response.data.comments)
                 } else {
                     alert('Failed to get comments Info')
@@ -90,7 +81,7 @@ function MovieDetail(props) {
                 />
             </div>
             <div id='comment' className="detail-comment">
-              <Comments movieTitle={movie.original_title} CommentLists={CommentLists} postId={movie._id} refreshFunction={updateComment} />
+              <Comments CommentLists={CommentLists} postId={movie._id} refreshFunction={fetchData} />
             </div>
         </div>
     )

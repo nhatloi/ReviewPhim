@@ -9,9 +9,9 @@ const auth = require('../middleware/auth')
 
 router.post("/saveComment", auth, (req, res) => {
 
-    const comment = new Comment(req.body)
-    comment.save((err, comment) => {
-        console.log(err)
+    const {comment} = req.body
+    const newComment= new Comment(comment)
+    newComment.save((err, comment) => {
         if (err) return res.json({ success: false, err })
 
         Comment.find({ '_id': comment._id })
@@ -32,5 +32,18 @@ router.post("/getComments", (req, res) => {
             res.status(200).json({ success: true, comments })
         })
 });
+
+router.post("/removeComment",auth, async(req, res) => {
+
+    const {commentId} = req.body
+    try {
+        await Comment.findByIdAndDelete(commentId)
+        res.status(200).json({ msg:"remove Success!"})
+    } catch (error) {
+        return res.status(500).json({msg: error.message})
+    }
+
+});
+
 
 module.exports = router;

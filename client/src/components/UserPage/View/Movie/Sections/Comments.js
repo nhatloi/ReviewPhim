@@ -16,7 +16,7 @@ function Comments(props) {
         setComment(e.currentTarget.value)
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = async(e) => {
         e.preventDefault();
 
         if (!isLogged) {
@@ -28,19 +28,16 @@ function Comments(props) {
             writer: user._id,
             postId: props.postId
         }
-
-        axios.post('/comment/saveComment',{variables},{headers:{Authorization:token}})
-            .then(response => {
-                if (response.data.success) {
-                    setComment("")
-                    props.refreshFunction(response.data.result)
-                } else {
-                    alert('Failed to save Comment')
-                }
-            })
+        try {
+            const res = await axios.post('/comment/saveComment',{comment:variables},{headers:{Authorization:token}})
+            setComment("")
+            props.refreshFunction(res.data.result)
+        } catch (error) {
+            alert('Failed to save Comment')
+        }
     }
 
-    return (
+    return (    
         <div>
             <br />
             <Title level={3} > Share your opinions about {props.movieTitle} </Title>
