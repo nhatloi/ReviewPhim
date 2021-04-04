@@ -3,12 +3,14 @@ import ReactPlayer from 'react-player/youtube'
 import axios from 'axios'
 import {useSelector} from 'react-redux'
 import './MovieDetail.css'
+import Comments from './Sections/Comments'
+import LikeDislikes from './Sections/LikeDislikes';
 import {
     PlayCircleOutlined,
     LikeOutlined,
     DislikeOutlined
   } from '@ant-design/icons';
-import { Button,Comment, Avatar,Form, List, Input,Rate } from 'antd'
+import { Button,Comment, Avatar,Form, List, Input,Rate} from 'antd'
 const { TextArea } = Input;
 
 function MovieDetail(props) {
@@ -16,52 +18,15 @@ function MovieDetail(props) {
     //const
     const id = props.match.params.id
     const [movie, setmovie] = useState([])
+    const [CommentLists, setCommentLists] = useState([])
     const [likes, setlikes] = useState([])
-    const [liked, setliked] = useState(false)
     const auth = useSelector(state => state.auth)
+    const user = useSelector(state => state.auth.user)
 
-    const CommentList = ({ comments }) => (
-        <List
-          dataSource={comments}
-          header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
-          itemLayout="horizontal"
-          renderItem={props => <Comment {...props} />}
-        />
-      );
-      
-      const Editor = ({ onChange, onSubmit, submitting, value }) => (
-        <>
-          <Form.Item>
-            <TextArea rows={4} onChange={onChange} value={value} />
-          </Form.Item>
-          <Form.Item>
-            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-              Add Comment
-            </Button>
-          </Form.Item>
-        </>
-      );
 
-    const ExampleComment = ({ children }) => (
-        <Comment
-          actions={[<span key="comment-nested-reply-to">Reply to</span>]}
-          author={<a>Han Solo</a>}
-          avatar={
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              alt="Han Solo"
-            />
-          }
-          content={
-            <p>
-              We supply a series of design principles, practical patterns and high quality design
-              resources (Sketch and Axure).
-            </p>
-          }
-        >
-          {children}
-        </Comment>
-      );
+    const updateComment = (newComment) => {
+      setCommentLists(CommentLists.concat(newComment))
+  }
 
     useEffect(() => {
         fetchData();
@@ -72,8 +37,16 @@ function MovieDetail(props) {
         try {
             const res = await axios.get(`/movie/getmoviebyid/${id}`)
             setmovie(res.data)
-            const res2 = await axios.get('/like/getLikes/',{headers:{videoId:res.data._id}})
-            setlikes(res2.data.likes)
+            axios.post('/comment/getComments', { movieId: res.data._id})
+            .then(response => {
+                console.log(response)
+                if (response.data.success) {
+                    console.log('response.data.comments', response.data.comments)
+                    setCommentLists(response.data.comments)
+                } else {
+                    alert('Failed to get comments Info')
+                }
+            })
         } catch (err) {
            return;
         }
@@ -95,7 +68,9 @@ function MovieDetail(props) {
                 <p/>
                 {movie.overview}<p/>
                 <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
-                <Button>Like<LikeOutlined />{likes.length}</Button><p/>
+                <div className='likedislike'>
+                    <LikeDislikes video videoId={movie._id} userId={user._id} />
+                </div>
                 {/* <DislikeOutlined /> */}
                 <a href="#trailer"><PlayCircleOutlined/> View Trailer</a><p/>
                 </p>
@@ -115,28 +90,7 @@ function MovieDetail(props) {
                 />
             </div>
             <div id='comment' className="detail-comment">
-                <div>
-                    this is comment movie
-                    <ExampleComment>
-                        <ExampleComment>
-                        <ExampleComment />
-                        <ExampleComment />
-                        </ExampleComment>
-                    </ExampleComment>
-                    <Comment
-          avatar={auth.user?
-            <Avatar
-              src={auth.user.avatar}
-              alt={auth.user.name}
-            />:null
-          }
-          content={
-            <Editor
-            />
-          }
-        />
-                </div>
-                
+              <Comments movieTitle={movie.original_title} CommentLists={CommentLists} postId={movie._id} refreshFunction={updateComment} />
             </div>
         </div>
     )

@@ -11,8 +11,9 @@ const dislikeSchema = mongoose.Schema({
         ref: 'Comment'
     },
     videoId: {
-        type: String,
-    }
+        type: Schema.Types.ObjectId,
+        ref: 'Movie',
+       }
 
 }, { timestamps: true })
 

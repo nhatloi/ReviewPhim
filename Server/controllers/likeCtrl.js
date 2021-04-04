@@ -4,23 +4,42 @@ const { Dislike } = require("../models/Dislike");
 
 const likeCtrl = {
     GetLikes : async (req,res) =>{
-        const videoId = req.header("videoId")
-        const commentId = req.header("commentId")
-        const UserId = req.header("UserId")
+     
         try {
             let variable = {}
-            if (videoId) {
-                variable = { videoId: videoId }
-            } else {
-                if (!commentId) return res.status(500).json({msg:false})
-                variable = { commentId: commentId }
-            }
+                if (req.body.videoId) {
+                    variable = { videoId: req.body.videoId }
+                } else {
+                    variable = { commentId: req.body.commentId }
+                }
 
-            Like.find(variable)
-                .exec((err, likes) => {
-                    if (err) return res.status(400).send(err);
-                    res.status(200).json({ msg: true, likes })
-        })
+                Like.find(variable)
+                    .exec((err, likes) => {
+                        if (err) return res.status(400).send(err);
+                        res.status(200).json({ success: true, likes })
+                    })
+
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+    GetDisLike : async (req,res) =>{
+     
+        try {
+           
+                let variable = {}
+                if (req.body.videoId) {
+                    variable = { videoId: req.body.videoId }
+                } else {
+                    variable = { commentId: req.body.commentId }
+                }
+
+                Dislike.find(variable)
+                    .exec((err, dislikes) => {
+                        if (err) return res.status(400).send(err);
+                        res.status(200).json({ success: true, dislikes })
+                    })
+
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

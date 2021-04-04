@@ -14,8 +14,8 @@ import News from '../View/News/NewsPage'
 import Home from '../View/Home'
 import Header from './Header'
 import Footer from './Footer'
-import MovieDetail from '../View/MovieDetail'
-import Totalmovie from '../View/Totalmovie'
+import MovieDetail from '../View/Movie/MovieDetail'
+import Totalmovie from '../View/Movie/Totalmovie'
 
 
 function Body() {
