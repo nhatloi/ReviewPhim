@@ -34,10 +34,6 @@ const movie = new mongoose.Schema({
     trailer: {
         type:String
     },
-    premiere:{
-        type:Number,
-        default:0
-    },
     release_date: {
         type:String
     },

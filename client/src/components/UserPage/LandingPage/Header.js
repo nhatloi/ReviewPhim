@@ -2,7 +2,6 @@ import React,{useState} from 'react'
 import {useSelector} from 'react-redux'
 import axios from 'axios';
 import logo from '../../../access/images/Logo.png';  
-import {UpOutlined} from '@ant-design/icons';  
 import {BackTop , Menu, Dropdown} from 'antd';
 import {
     Collapse,
@@ -13,12 +12,8 @@ import {
     NavItem,
     NavLink,
     UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
     Button
   } from 'reactstrap';
-import LeftMenu from './LeftMenu'
 import { Drawer } from 'antd';
 import Login from '../../auth/Login'
 
@@ -86,23 +81,18 @@ function NavHeader() {
 
           <Nav className="mr-auto" navbar>
           <NavItem>
-              <NavLink href="/bookticket">Book Ticket</NavLink>
+              <NavLink href="/">Home</NavLink>
+            </NavItem>
+          <NavItem>
+              <NavLink href="/movies">Movies</NavLink>
             </NavItem>
             <NavItem>
               <NavLink href="/news">News</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink href="/movies">Reviews</NavLink>
+            </NavItem>
             <UncontrolledDropdown nav inNavbar>
-              {/* <DropdownToggle nav caret>
-                Movie theaters
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                <NavLink href="/intheaters/sap-chieu">Up comming</NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                <NavLink href="/intheaters/dang-chieu">Now Play</NavLink>
-                </DropdownItem>
-              </DropdownMenu> */}
             </UncontrolledDropdown>
           </Nav>
           {isLogged?userInfor()

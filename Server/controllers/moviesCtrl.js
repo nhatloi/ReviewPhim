@@ -176,23 +176,7 @@ const moviesCtrl = {
             return res.status(500).json({msg: error.message})
         }
     },
-    GetComing_soon : async (req,res) =>{
-        try {
-            const movie = await Movie.find({premiere:0})
-            return res.json({totalResult:movie.length,movie:movie})
-        } catch (error) {
-            return res.status(500).json({msg: error.message})
-        }
-    },
 
-    GetPlaynow : async (req,res) =>{
-        try {
-            const movie = await Movie.find({premiere:1})
-            return res.json({totalResult:movie.length,movie:movie})
-        } catch (error) {
-            return res.status(500).json({msg: error.message})
-        }
-    },
 
     DeleteMovie : async (req,res) =>{
         try {

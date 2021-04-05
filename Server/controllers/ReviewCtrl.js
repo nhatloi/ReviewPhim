@@ -59,7 +59,7 @@ const ReviewCtrl = {
                 review.content.push($(e).text());
             }
             if($(e).find('img').attr('class'))
-                review.content.push(`img src= '${$(e).find('img').attr('src')}'`);
+                review.content.push(`(img) ${$(e).find('img').attr('src')}`);
             })
             const stopwords = fs.readFileSync('stopwords.txt');
             var data = fs.readFileSync('stopwords.txt');
@@ -77,9 +77,21 @@ const ReviewCtrl = {
             const {WriterId,description,post_date,content,keywords} = req.body
             const check_result = await Review.findOne({WriterId,description,post_date,content})
             if(check_result) return res.status(400).json({msg:'this Review already exists!'})
-            const newResult = new News({WriterId,description,post_date,content,keywords})
+            const newResult = new Review({WriterId,description,post_date,content,keywords})
             await newResult.save();
             res.json({msg:"Review Added!"})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+    GetallReview : async (req,res) =>{
+        try {
+            Review.
+            find().
+            exec(function (err, reviews) {
+                if (err) return handleError(err);
+                return res.json({review:reviews})
+            });
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

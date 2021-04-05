@@ -65,6 +65,22 @@
     font-size: 30px;
 }
 
+.Page-review{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 20px;
+    margin: auto;
+    font-size: medium;
+}
+
+.Page-review img{
+    width: 80%;
+
+}
+.Page-review .review-content{
+    margin: 10px;
+}
+
+
 
 
 

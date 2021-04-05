@@ -1,16 +1,5 @@
 /* Header */
 
-.header {
-    background: white;
-}
-.header a{
-    color: black;
-}
-
-.header a:hover{
-    color: brown;
-}
-
 .header label{
     text-transform: uppercase;
     font-size: 19px;

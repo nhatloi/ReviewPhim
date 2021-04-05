@@ -1,9 +1,8 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Pagination, Badge, Menu, Dropdown, Space,Form} from 'antd';
+import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkbox } from 'antd';
 import {useSelector} from 'react-redux'
-import { DeleteOutlined,UserOutlined,DownOutlined,FolderAddOutlined} from '@ant-design/icons';
+import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
 import axios from 'axios'
-
 const { Text} = Typography;
 
 function Review() {
@@ -11,6 +10,7 @@ function Review() {
      //const
      const [results, setresults] = useState([])
      const token = useSelector(state => state.token)
+     const user = useSelector(state => state.auth.user)
      const [view, setview] = useState([])
      const [isModalVisible, setIsModalVisible] = useState(false);
      const [searching, setsearching] = useState(0)
@@ -20,18 +20,31 @@ function Review() {
      const [totalResutls, settotalResutls] = useState()
      const [readmore, setreadmore] = useState([])
      const [visible, setvisible] = useState(false)
-     
+     const Loading = (
+        <div>
+            <Skeleton.Image active={true} /> 
+            <Skeleton active={true}/> 
+        </div>
+    );
 
     const columns = [
         {
           title: 'description',
           dataIndex: 'description',
-          width:"50%",
         },
           {
-            title: 'img',
-            dataIndex: 'img',
-            render: result =><img src={result}/> 
+            title: 'content',
+            dataIndex: 'content',
+            width:"40%",
+            render: result =><div>{result[0]}...........</div>
+          },
+          {
+            title: 'post_date',
+            dataIndex: 'post_date',
+          },
+          {
+            title: 'keywords',
+            dataIndex: 'keywords',
           },
 
         {
@@ -52,10 +65,10 @@ function Review() {
 
     const Reviews_eff = async() =>{
         try{
-            // const res = await axios.get('/review/getreviews',{headers:{page:page}})
-            // setresults(res.data.reivew)
+            const res = await axios.get('/review/getallreviews')
+            setresults(res.data.review)
         }catch (error) {
-            console.log(error);
+            message.error(error.response.data.msg)
         }
     }
 
@@ -65,24 +78,9 @@ function Review() {
             setListReview(res.data.reivew)
             settotalResutls(res.data.total_results)
         }catch (error) {
-            console.log(error);
+            message.error(error.response.data.msg)
         }
     }
-
-    // const Addnew = async () =>{
-        
-    //     try {
-    //         const res = await axios.post(`/news/addnews`,{WriterId:writer,description:newsclick.description,link:newsclick.link,source:newsclick.source,time:newsclick.time,img:newsclick.img   },
-    //         {headers:{Authorization:token}
-    //         })
-    //         message.success(res.data.msg)
-    //         localStorage.setItem('updatePage',true)
-    //         News_eff();
-    //     } catch (error) {
-    //         message.warning("not add")
-    //     }
-    // }
-
 
     const handleSearch = (e) =>{
         const str = e.target.value;
@@ -116,7 +114,7 @@ function Review() {
             setTimeout(hide, 2500);
             Reviews_eff();
         } catch (error) {
-            return;
+            message.error(error.response.data.msg)
         }
         setIsModalVisible(false)
     };
@@ -126,51 +124,41 @@ function Review() {
     const ChangePage = (e) => {
         setpage(e)
     };
-
-    const HandleReadmore = async(e) => {
-        try{
-            const res = await axios.get('/review/getdetail',{headers:{url:e.source}})
-            setreadmore(res.data.reivew)
-            setvisible(true)
-        }catch (error) {
-            console.log(error);
-        }
-    };
-
     
     const ColumnsList = [
         {
             dataIndex: 'img',
-            width:"120px",
             render: result =><img src={result}/> 
           },
         {
           dataIndex: '',
-          width:"75%",
-          render: result =><div><a style={{color:'black'}} href={result.description}>{result.description}</a>
+          width:"60%",
+          render: result =><div><a style={{color:'black'}}>{result.description}</a>
           </div>
 
         },
-
-        {
-            title: "Action",
-            dataIndex: "",
-            key: "x",
-            render: () =>
-                <div>
-                   <Button>Add</Button>
-                </div>
-          },
       ];
-    const  handleOk = () => {
-        setvisible(false);
-        console.log(readmore)
+    const  handleView = async(e) => {
+        const res = await axios.get('/review/getdetail',{headers:{url:e.source}})   
+        setreadmore(res.data.review)
+        setvisible(!visible);
       };
     
     const  handleCancel = () => {
-        setvisible(false );
+        setvisible(!visible);
       };
-
+          
+    const  handleOk = async() => {
+        try {
+            const res = await axios.post('/review/addreview',{WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
+            message.success(res.data.msg)
+            Reviews_eff()
+        setvisible(!visible);
+        } catch (error) {
+            message.error(error.response.data.msg)
+        }
+        
+      };
 
     return (
         <div>
@@ -194,27 +182,11 @@ function Review() {
             </div>
             <div className='list-review'>
                 <h2 style={{textAlign:'center'}}><Text>Add New</Text></h2>
-                <Form
-                    name="basic"
-                    >
-                    <Form.Item
-                        label="Username"
-                        name="username"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
-                    >
-                        <Input value={readmore?readmore.description:'0'}/>
-                    </Form.Item>
-
-                    <Form.Item >
-                        <Button type="primary" htmlType="submit">
-                        Submit
-                        </Button>
-                    </Form.Item>
-                    </Form>
-                <Table bordered={true} columns={ColumnsList} scroll={{ y: 450 }}  pagination={false} dataSource={ListReview} 
+                <Table bordered={true} columns={ColumnsList}  pagination={false} dataSource={ListReview} 
                     onRow={(record, rowIndex) => {
                         return {
-                            onClick: event => HandleReadmore(ListReview[rowIndex]), // click row
+                            onClick: event => {handleView(ListReview[rowIndex]);
+                            }, // click row
                             onContextMenu: event => {}, // right button click row
                         };
                     }}
@@ -222,14 +194,39 @@ function Review() {
 
                     <Pagination defaultCurrent={1} total={totalResutls*10} onChange={ChangePage} />
                 </div>
-
                 <Modal
+                    width='80%'
                     visible={visible}
-                    // title={readmore.description}
+                    title={readmore.title}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     >
-                    
+                        <div className='Page-review'>
+                            <div style={{fontFamily:'sans-serif',color:'gray',fontStyle:'oblique'}}>
+                                {readmore.description}<p/>
+                                {readmore.post_date}<p/>
+                                </div>
+                            {readmore.content && readmore.content.map((line, index) => (
+                                <div className='review-content'>
+                                    {line.slice(0,5)==='(img)'?
+                                    <img alt='line' src={line.slice(6,line.length)}/>
+                                    :null
+                                    }
+                                    {line.slice(0,5)!=='(img)' && index !== readmore.content.length-1?
+                                    line
+                                    :null
+                                    }
+                                    {line.slice(0,5)!=='(img)' && index === readmore.content.length-1?
+                                    `--${line}--`
+                                    :null
+                                    }
+                                </div>
+                            ))}
+
+                            {readmore.keywords?
+                                    <Checkbox.Group options={readmore.keywords} />:null}
+                        </div>
+                        
                     </Modal>
         </div>
     )

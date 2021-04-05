@@ -1,11 +1,10 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Drawer,Form} from 'antd';
+import {Typography,Table,Modal,message,Input,Button} from 'antd';
 import {useSelector} from 'react-redux'
-import { SettingOutlined,DeleteOutlined,UserOutlined} from '@ant-design/icons';
+import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
 import axios from 'axios'
 
 const { Text} = Typography;
-const { TextArea } = Input;
 
 function News() {
 
@@ -118,7 +117,7 @@ function News() {
             const res = await axios.get('/news/get_allnews')
             setresults(res.data.news)
         }catch (error) {
-            console.log(error);
+            message.error(error.response.data.msg)
         }
     }
 
@@ -127,7 +126,7 @@ function News() {
             const res = await axios.get('/news/getnews')
             setlistNews(res.data.news)
         }catch (error) {
-            console.log(error);
+            message.error(error.response.data.msg)
         }
     }
 
@@ -141,7 +140,7 @@ function News() {
             localStorage.setItem('updatePage',true)
             News_eff();
         } catch (error) {
-            message.warning("not add")
+            message.warning(error.response.data.msg)
         }
     }
 
@@ -178,7 +177,7 @@ function News() {
             setTimeout(hide, 2500);
             News_eff();
         } catch (error) {
-            return;
+            message.error(error.response.data.msg)
         }
         setIsModalVisible(false)
     };
