@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const Review = require('../models/Review');
 const fs = require("fs");
 const url= "https://www.gocdienanh.com/review-phim/"
 const { generateKeywords, clearKeywords } = require('keywords-extractor');
@@ -14,8 +15,6 @@ const fetchData = async(url) =>{
 const ReviewCtrl = {
     GetReviews : async (req,res) =>{
         const page = req.header("page")
-
-
        try{
             const content = await fetchData(`${url}page/${page}/`)
             const $ =cheerio.load(content)
@@ -32,7 +31,9 @@ const ReviewCtrl = {
                 }
                 reviews.push(oneReview)
             })
-            res.json({msg:reviews})
+            const total_results = $('.page-nav.td-pb-padding-side').find('>a.last').text();
+            
+            res.json({reivew:reviews,total_results:total_results})
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }
@@ -71,6 +72,18 @@ const ReviewCtrl = {
          }    
      },
 
+    AddReview : async (req,res) =>{
+        try {
+            const {WriterId,description,post_date,content,keywords} = req.body
+            const check_result = await Review.findOne({WriterId,description,post_date,content})
+            if(check_result) return res.status(400).json({msg:'this Review already exists!'})
+            const newResult = new News({WriterId,description,post_date,content,keywords})
+            await newResult.save();
+            res.json({msg:"Review Added!"})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
 }
 
 

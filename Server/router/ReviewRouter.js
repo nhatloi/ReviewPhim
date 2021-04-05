@@ -5,6 +5,6 @@ const authAdmin = require('../middleware/authAdmin')
 
 router.get('/getreviews', ReviewCtrl.GetReviews)
 router.get('/getdetail', ReviewCtrl.GetDetailReview)
-
+router.post('/addreview',auth,authAdmin,ReviewCtrl.AddReview)
 
 module.exports = router

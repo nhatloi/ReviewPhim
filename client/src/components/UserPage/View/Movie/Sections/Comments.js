@@ -53,12 +53,6 @@ function Comments(props) {
                 )
             ))}
 
-            {props.CommentLists && props.CommentLists.length === 0 &&
-                <div style={{ display: 'flex', justifyContent:'center', alignItems:'center', height:'200px'}} >
-                    Be the first one who shares your thought about this movie
-                </div>
-            }
-
             {/* Root Comment Form */}
             <form style={{ display: 'flex' }} onSubmit={onSubmit}>
                 <TextArea
@@ -68,7 +62,7 @@ function Comments(props) {
                     placeholder="write some comments"
                 />
                 <br />
-                <Button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</Button>
+                <Button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Comment</Button>
             </form>
 
         </div>

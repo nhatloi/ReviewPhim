@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import Account from '../Body/Account'
 import Movie from '../Body/Movie'
 import News from '../Body/News'
+import Review from '../Body/Review'
 
 function Body() {
     return (
@@ -14,6 +15,7 @@ function Body() {
                     <Route exact path="/account" component={Account}/>
                     <Route exact path="/movies" component={Movie}/>
                     <Route exact path="/news" component={News}/>
+                    <Route exact path="/review" component={Review}/>
                     <Route exact path="/" component={Account}/>
                 </Switch>
             </section>

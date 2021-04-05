@@ -25,6 +25,7 @@ function LikeDislikes(props) {
 
     useEffect(() => {
 
+        console.log(variable)
         Axios.post('/like/getLikes', variable)
             .then(response => {
                 if (response.data.success) {

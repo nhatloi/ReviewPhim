@@ -20,6 +20,8 @@ function MovieDetail(props) {
     const [movie, setmovie] = useState([])
     const [CommentLists, setCommentLists] = useState([])
     const user = useSelector(state => state.auth.user)
+    const [loadcomment, setloadcomment] = useState(0)
+    const [viewComment, setviewComment] = useState(false)
 
     useEffect(() => {
         fetchData();
@@ -60,10 +62,9 @@ function MovieDetail(props) {
                 {movie.overview}<p/>
                 <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
                 <div className='likedislike'>
-                    <LikeDislikes video videoId={movie._id} userId={user._id} />
+                    <LikeDislikes video videoId={id} userId={user._id} /> <a href="#trailer"><PlayCircleOutlined/>Trailer</a>
+                    <Button style={{background:'transparent',color:'white'}} onClick={()=>{setviewComment(!viewComment)}}>Comment</Button><p/>
                 </div>
-                {/* <DislikeOutlined /> */}
-                <a href="#trailer"><PlayCircleOutlined/> View Trailer</a><p/>
                 </p>
                 <img style={{height:"500px",width:"300px",opacity:'1',float:'right'}} src={movie.poster_path}/>
             </div>
@@ -72,16 +73,21 @@ function MovieDetail(props) {
              <div className='poster'>
             </div>
             </div>
-            <div id='trailer' className="detail-trailer">
+            {
+                viewComment?
+                    <div id='comment' className="detail-comment">
+                    <Comments CommentLists={CommentLists} postId={movie._id} refreshFunction={fetchData} />
+                </div>
+                :
+                null
+            }
+             <div id='trailer' className="detail-trailer">
                 <ReactPlayer url={movie.trailer}
                 height='100%'
                 width='100%' 
                 playIcon
                 controls={true}  
                 />
-            </div>
-            <div id='comment' className="detail-comment">
-              <Comments CommentLists={CommentLists} postId={movie._id} refreshFunction={fetchData} />
             </div>
         </div>
     )
