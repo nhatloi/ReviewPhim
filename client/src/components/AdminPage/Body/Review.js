@@ -1,16 +1,14 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Pagination,Form} from 'antd';
+import {Typography,Table,Modal,message,Input,Button,Pagination, Badge, Menu, Dropdown, Space,Form} from 'antd';
 import {useSelector} from 'react-redux'
-import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
+import { DeleteOutlined,UserOutlined,DownOutlined,FolderAddOutlined} from '@ant-design/icons';
 import axios from 'axios'
 
 const { Text} = Typography;
-const { TextArea } = Input;
 
 function Review() {
 
      //const
-     const [listNews, setlistNews] = useState([])
      const [results, setresults] = useState([])
      const token = useSelector(state => state.token)
      const [view, setview] = useState([])
@@ -20,70 +18,16 @@ function Review() {
      const [ListReview, setListReview] = useState([])
      const [page, setpage] = useState(0)
      const [totalResutls, settotalResutls] = useState()
-
-
-    const ColumnsList = [
-        {
-            dataIndex: 'img',
-            width:"120px",
-            render: result =><img src={result}/> 
-          },
-        {
-          dataIndex: '',
-          width:"75%",
-          render: result =><div><a style={{color:'black'}} href={result.description}>{result.description}</a>
-          
-            <div style={{color:'gray'}}>{result.source} - {result.time} </div>
-          </div>
-
-        },
-
-        {
-            title: "Action",
-            dataIndex: "",
-            key: "x",
-            render: () =>
-                <div>
-                   {/* <Button onClick={Addnew}>Add</Button> */}
-                </div>
-          },
-      ];
-
+     const [readmore, setreadmore] = useState([])
+     const [visible, setvisible] = useState(false)
+     
 
     const columns = [
         {
           title: 'description',
           dataIndex: 'description',
-          width:"25%",
+          width:"50%",
         },
-
-        {
-            title: 'Infomation',
-            children: [
-              {
-                title: 'source',
-                dataIndex: 'source',
-                key: 'source',
-              },
-              {
-                title: 'time',
-                dataIndex: 'time',
-                key:"time",
-              },
-              {
-                title: 'Writer',
-                dataIndex: 'WriterId',
-                key:'total_seats',
-               render: result =><div>{result.name}</div>
-              },
-              {
-                title: 'Original link',
-                dataIndex: 'link',
-                key:'Original_link',
-              },
-            ],
-          },
-
           {
             title: 'img',
             dataIndex: 'img',
@@ -96,7 +40,7 @@ function Review() {
             key: "x",
             render: () =>
                 <div>
-                    <Button icon={<DeleteOutlined/>} onClick={Deletehandle}>Delete</Button>
+                    <Button icon={<DeleteOutlined />} onclick={Deletehandle}>Delete</Button>
                 </div>
           },
       ];
@@ -183,7 +127,49 @@ function Review() {
         setpage(e)
     };
 
+    const HandleReadmore = async(e) => {
+        try{
+            const res = await axios.get('/review/getdetail',{headers:{url:e.source}})
+            setreadmore(res.data.reivew)
+            setvisible(true)
+        }catch (error) {
+            console.log(error);
+        }
+    };
 
+    
+    const ColumnsList = [
+        {
+            dataIndex: 'img',
+            width:"120px",
+            render: result =><img src={result}/> 
+          },
+        {
+          dataIndex: '',
+          width:"75%",
+          render: result =><div><a style={{color:'black'}} href={result.description}>{result.description}</a>
+          </div>
+
+        },
+
+        {
+            title: "Action",
+            dataIndex: "",
+            key: "x",
+            render: () =>
+                <div>
+                   <Button>Add</Button>
+                </div>
+          },
+      ];
+    const  handleOk = () => {
+        setvisible(false);
+        console.log(readmore)
+      };
+    
+    const  handleCancel = () => {
+        setvisible(false );
+      };
 
 
     return (
@@ -202,21 +188,49 @@ function Review() {
 
                     {/* information */}
                     <Modal title="confirm deletion" visible={isModalVisible} onOk={handleOkDelete} onCancel={handleCancelDelete} >
-                        <p>Delete News?</p>
+                        <p>Delete?</p>
                     </Modal>
 
             </div>
             <div className='list-review'>
-                <h2 style={{textAlign:'center'}}><Text>Add News</Text></h2>
-                    {ListReview && ListReview.map((review, index) => (
-                        <Button className='card-review'>
-                            <img alt='review' src={review.img}/>
-                            <div style={{marginLeft:'20px'}}>{review.description}</div>
-                            <div style={{position:'absolute',bottom:0,right:10,color:'red'}}>Read More</div>
+                <h2 style={{textAlign:'center'}}><Text>Add New</Text></h2>
+                <Form
+                    name="basic"
+                    >
+                    <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[{ required: true, message: 'Please input your username!' }]}
+                    >
+                        <Input value={readmore?readmore.description:'0'}/>
+                    </Form.Item>
+
+                    <Form.Item >
+                        <Button type="primary" htmlType="submit">
+                        Submit
                         </Button>
-                    ))}
+                    </Form.Item>
+                    </Form>
+                <Table bordered={true} columns={ColumnsList} scroll={{ y: 450 }}  pagination={false} dataSource={ListReview} 
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: event => HandleReadmore(ListReview[rowIndex]), // click row
+                            onContextMenu: event => {}, // right button click row
+                        };
+                    }}
+                    />
+
                     <Pagination defaultCurrent={1} total={totalResutls*10} onChange={ChangePage} />
                 </div>
+
+                <Modal
+                    visible={visible}
+                    // title={readmore.description}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    >
+                    
+                    </Modal>
         </div>
     )
 }

@@ -66,7 +66,7 @@ const ReviewCtrl = {
             
             const keywords = generateKeywords(review.content.join(' '));
             review.keywords = clearKeywords(keywords, stopwords).slice(0,30);
-             res.json({msg:review})
+             res.json({review:review})
             } catch (error) {
              return res.status(500).json({msg: error.message})
          }    
