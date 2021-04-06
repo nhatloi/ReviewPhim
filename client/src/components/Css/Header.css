@@ -1,4 +1,47 @@
 /* Header */
+.header {
+    width: 100%;
+    background: white;
+}
+.test {
+    height: 100%;
+    width: 100%;
+    background: turquoise;
+}
+
+.header a{
+    color: black;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.mr-auto a{
+    font-size: 2em;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 3px solid transparent;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 0;
+    position: relative;
+    transition:ease-in-out 1s;
+}
+
+
+.mr-auto a:hover{
+    transform: translateX(10px) translateY(-10px); 
+    text-shadow:-10px 10px 5px red;
+    border-bottom: 3px solid red;
+}
+
+
+
+
+
+
+
+
 
 .header label{
     text-transform: uppercase;

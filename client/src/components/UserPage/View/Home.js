@@ -22,12 +22,12 @@ function Home() {
 
     const fetchData = async () =>{
         try {
-            const res = await axios.get('/movie/getplaynow')
+            const res = await axios.get('/movie/getallmovie')
             setmovieFocus(res.data.movie[0])
             setplayNow(res.data.movie);
             const res2 = await axios.get('/news/get_allnews')
             setNews(res2.data.news)
-            const res3 = await axios.get('/movie/getcomingsoon')
+            const res3 = await axios.get('/movie/getallmovie')
             setcomingSoon(res3.data.movie)
         } catch (err) {
            return;
