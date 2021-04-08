@@ -1,10 +1,9 @@
 const axios = require('axios');
+const sw = require('stopword')
 const cheerio = require('cheerio');
 const Review = require('../models/Review');
-const fs = require("fs");
+    const fs = require("fs");
 const url= "https://www.gocdienanh.com/review-phim/"
-const { generateKeywords, clearKeywords } = require('keywords-extractor');
-var ws = require('word-salience');
 
 const fetchData = async(url) =>{
     const result = await axios.get(url)
@@ -61,12 +60,14 @@ const ReviewCtrl = {
             if($(e).find('img').attr('class'))
                 review.content.push(`(img) ${$(e).find('img').attr('src')}`);
             })
-            const stopwords = fs.readFileSync('stopwords.txt');
-            var data = fs.readFileSync('stopwords.txt');
-            
-            const keywords = generateKeywords(review.content.join(' '));
-            review.keywords = clearKeywords(keywords, stopwords).slice(0,30);
-             res.json({review:review})
+
+            var text = review.content;
+            // var text = sw.removeStopwords(review.content.toString().split(' '), sw.vi).join(' ');
+            var stopwords = fs.readFileSync('stopwords.txt');
+            text = removeStop(text,stopwords);
+            review.keywords = extract_keywords(text);
+
+            res.json({review:review})
             } catch (error) {
              return res.status(500).json({msg: error.message})
          }    
@@ -98,5 +99,45 @@ const ReviewCtrl = {
     },
 }
 
+function removeStop(text,stopwords){
+    text = text.join('. ');
+    text = text.toString().split(' ');
+    console.log(text)
+    stopwords = stopwords.toString().split('\n')
+    text.forEach((element,index) => {
+        element = element.toLowerCase();
+       if(stopwords.includes(element)==true)
+       {
+            text.splice(index, 1);
+       }
+   });
+   text = text.join(' ')
+   return text;
+}
+
+function extract_keywords(content,number) {
+    let regex = /([A-ZĐ]+[^\(].)(([ \-][^a-z\.\:\(])*['\wÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ])*[^\. \:\,\)\(]/gm
+    var keywords = []
+    var temp = []
+
+    while ((array1 = regex.exec(content)) !== null) {
+        if(temp.includes(array1[0]) == false)
+        {
+            temp.push(array1[0]);
+            keywords.push('1_'+array1[0]);
+        }
+        else{
+            var count = parseInt(keywords[temp.indexOf(array1[0])][0]) + 1;
+            keywords[temp.indexOf(array1[0])] = count+'_'+array1[0];
+        }
+    }
+    keywords.sort()
+    keywords.reverse()
+    keywords.forEach(function(item, index) {
+        keywords[index] = item.slice(2);
+    });
+    if(!number) return keywords;
+    return keywords.slice(0,number);
+}
 
 module.exports = ReviewCtrl

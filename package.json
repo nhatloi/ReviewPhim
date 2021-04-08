@@ -45,6 +45,7 @@
     "react-facebook-login": "^4.1.1",
     "react-moment": "^1.1.1",
     "react-spring": "^9.0.0",
+    "stopword": "^1.0.7",
     "word-salience": "0.0.1"
   },
   "devDependencies": {
