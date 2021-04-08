@@ -62,10 +62,9 @@ const ReviewCtrl = {
             })
 
             var text = review.content;
-            // var text = sw.removeStopwords(review.content.toString().split(' '), sw.vi).join(' ');
             var stopwords = fs.readFileSync('stopwords.txt');
-            text = removeStop(text,stopwords);
-            review.keywords = extract_keywords(text);
+            text = await removeStop(text,stopwords);
+            review.keywords =await extract_keywords(text,20);
 
             res.json({review:review})
             } catch (error) {
@@ -101,12 +100,10 @@ const ReviewCtrl = {
 
 function removeStop(text,stopwords){
     text = text.join('. ');
-    text = text.toString().split(' ');
-    console.log(text)
-    stopwords = stopwords.toString().split('\n')
+    text = text.split(' ');
+    stopwords = stopwords.toString().split('\r\n')
     text.forEach((element,index) => {
-        element = element.toLowerCase();
-       if(stopwords.includes(element)==true)
+       if(stopwords.includes(element.toLowerCase())==true)
        {
             text.splice(index, 1);
        }
@@ -116,7 +113,7 @@ function removeStop(text,stopwords){
 }
 
 function extract_keywords(content,number) {
-    let regex = /([A-ZĐ]+[^\(].)(([ \-][^a-z\.\:\(])*['\wÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ])*[^\. \:\,\)\(]/gm
+    let regex = /([A-Z]+[^\(\_].)(([ \-][^a-z\.\:\(])*['’\wÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ])*[^\. \:\,\)\(\”\?]/gm
     var keywords = []
     var temp = []
 
