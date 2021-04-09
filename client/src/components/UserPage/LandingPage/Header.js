@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {useSelector} from 'react-redux'
 import axios from 'axios';
 import logo from '../../../access/images/Logo.png';  
-import {BackTop , Menu, Dropdown} from 'antd';
+import {BackTop , Menu, Dropdown,Input} from 'antd';
 import {
     Collapse,
     Navbar,
@@ -16,6 +16,7 @@ import {
   } from 'reactstrap';
 import { Drawer } from 'antd';
 import Login from '../../auth/Login'
+const { Search } = Input;
 
 
 
@@ -95,6 +96,15 @@ function NavHeader() {
             <UncontrolledDropdown nav inNavbar>
             </UncontrolledDropdown>
           </Nav>
+          <div style={{marginRight:'30px',width:'30%'}}>
+          <Search
+            placeholder="input search text"
+            allowClear
+            enterButton="Search"
+            size="large"
+            // onSearch={onSearch}
+          />
+          </div>
           {isLogged?userInfor()
           :
           <div><Button onClick={handleLogin}>login</Button>

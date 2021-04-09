@@ -1,122 +1,153 @@
-import React,{useState,useEffect}from 'react'
-import axios from 'axios'
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+import React,{useState,useEffect} from 'react'
 import ReactPlayer from 'react-player/youtube'
-import { List, Skeleton, Avatar,Row,Col} from 'antd';
-
+import axios from 'axios'
 import './Home.css'
 
-
 function Home() {
-    const [comingSoon, setcomingSoon] = useState([])
-    const [playNow, setplayNow] = useState([])
-    const [News, setNews] = useState([])
-    const [autoPlay, setautoPlay] = useState(true)
-    const [movieFocus, setmovieFocus] = useState([])
 
- 
+    const [Movies, setMovies] = useState([])
+    const nullvideo = 'https://www.youtube.com/watch?v=TY3IAqm-gpE'
+
     useEffect(() => {
-        fetchData();
-    },[])
+        movies_eff()
+    }, [])
 
-    const fetchData = async () =>{
-        try {
+    const movies_eff = async() =>{
+        try{
             const res = await axios.get('/movie/getallmovie')
-            setmovieFocus(res.data.movie[0])
-            setplayNow(res.data.movie);
-            const res2 = await axios.get('/news/get_allnews')
-            setNews(res2.data.news)
-            const res3 = await axios.get('/movie/getallmovie')
-            setcomingSoon(res3.data.movie)
-        } catch (err) {
-           return;
+            setMovies(res.data.movie)
+        }catch (error) {
+            console.log(error);
         }
     }
 
-    const handleChange = (e)=>{
-        setmovieFocus(playNow[e])
-    }
-    
 
     return (
-        <div>
-            {
-                !playNow.length? <div><Skeleton loading={true}/><Skeleton loading={true}/><Skeleton loading={true}/><Skeleton loading={true}/></div>
-                :
-                    <div className="home"> 
-                    <div className="list-movie">
-                        <Carousel verticalSwipe='natural' autoPlay={autoPlay} centerMode={true} infiniteLoop={true} onChange={handleChange}>
-                            {playNow && playNow.map((movie, index) => (
-                                                <div className="box">
-                                                    <div className="detail">
-                                                        <h2>{movie.title}</h2>
-                                                        <p>{new Date(movie.release_date).toLocaleDateString()}</p>
-                                                    </div>
-                                                    <a alt="movie-detail" href={`/movie/${movie._id}`}><img src={movie.poster_path} /></a>
-                                                </div>
-                                                    ))}
-                        </Carousel>
-                        <a href='/movie/total/playing_now'><h2> Now Playing</h2></a>
+        <div className='contaier'>
+            <h2>Trailer</h2>
+            {Movies.length && Movies.length>6?
+                <div className='trailer'>
+                <div className='row-1'>
+                    <div className='colunm-1'>
+                        <div className='videotrailer'>
+                                <ReactPlayer
+                                        controls
+                                        muted={true}
+                                        playing={true}
+                                        className='react-player'
+                                        url={Movies[0].trailer!='null'?Movies[0].trailer:nullvideo}
+                                        width='100%'
+                                        height='100%'
+                                        />
+                                <div className='information'>
+                                <h2> Trailer : {Movies[0].title}</h2>
+                                    Xem thêm
+                                </div>
+                            </div>
+                        <div className='videotrailer'>
+                            <ReactPlayer
+                                    controls
+                                    muted={true}
+                                    playing={true}
+                                    className='react-player'
+                                    url={Movies[1].trailer!='null'?Movies[1].trailer:nullvideo}
+                                    width='100%'
+                                    height='100%'
+                                    />
+                            <div className='information'>
+                                <h2> Trailer : {Movies[1].title}</h2>
+                                Xem thêm
+                            </div>
+                        </div>
+
                     </div>
-                    <div className='trailer'>
-                        <ReactPlayer url={movieFocus.trailer} onPlay={()=>{setautoPlay(false)}} onPause={()=>{setautoPlay(true)}}/>
-                        <div className='overview' >{movieFocus.overview}</div>
+
+
+
+                    
+                    <div className='colunm-2'>
+                        <div>
+                            <div className='videotrailer'>
+                                    <ReactPlayer
+                                            controls
+                                            muted={true}
+                                            playing={true}
+                                            className='react-player'
+                                            url={Movies[2].trailer!='null'?Movies[2].trailer:nullvideo}
+                                            width='90%'
+                                            height='70%'
+                                            />
+                                    <div className='information'>
+                                    <h2> Trailer : {Movies[2].title}</h2>
+                                        Xem thêm
+                                    </div>
+                                </div>
+
+                            <div className='videotrailer'>
+                                <ReactPlayer
+                                        controls
+                                        muted={true}
+                                        playing={true}
+                                        className='react-player'
+                                        url={Movies[3].trailer!='null'?Movies[3].trailer:nullvideo}
+                                        width='90%'
+                                        height='70%'
+                                        />
+                                <div className='information'>
+                                    <h2> Trailer : {Movies[3].title}</h2>
+                                    Xem thêm
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className='videotrailer'>
+                                <ReactPlayer
+                                        controls
+                                        muted={true}
+                                        playing={true}
+                                        className='react-player'
+                                        url={Movies[4].trailer!='null'?Movies[4].trailer:nullvideo}
+                                        width='90%'
+                                        height='70%'
+                                        />
+                                <div className='information'>
+                                    <h2> Trailer : {Movies[4].title}</h2>
+                                    Xem thêm
+                                </div>
+                            </div>
+
+                            <div className='videotrailer'>
+                                <ReactPlayer
+                                        controls
+                                        muted={true}
+                                        playing={true}
+                                        className='react-player'
+                                        url={Movies[5].trailer!='null'?Movies[5].trailer:nullvideo}
+                                        width='90%'
+                                        height='70%'
+                                        />
+                                <div className='information'>
+                                    <h2> Trailer : {Movies[5].title}</h2>
+                                    Xem thêm
+                                </div>
+                            </div>
+                        </div>
+                        
+
                     </div>
-                    <div className="news">
-                        <List
-                            dataSource={News}
-                            renderItem={item => (
-                            <List.Item key={item.description}>
-                                <List.Item.Meta
-                                avatar={
-                                    <Avatar src={item.img} />
-                                }
-                                title={<a href={item.link}>{item.description}</a>}
-                                description={`${item.source} - ${item.time}`}
-                                />
-                            </List.Item>
-                            )}
-                        >
-                            
-                        </List>
-                    </div>
-                    </div>
+
+
+
+                    
+                </div>
+
+                <div className='row-2'>
+                        
+                </div>
+            </div>:
+            null
             }
-        
             
-            <div className="coming_soon">
-                <a href='/movie/total/comingsoon'><h2>Coming Soon</h2></a>
-                {
-                    comingSoon.length?
-                    <div>
-                        <Row gutter={[8, 8]}>
-                        {comingSoon && comingSoon.map((movie, index) => (
-                            <React.Fragment key={index}>
-                               <Col span={6} >
-                                   <div className='card-movie'>
-                                       <label>{movie.episode}</label>
-                                        <a href={`/movie/${movie._id}`}>
-                                            <img alt ='poster' src={movie.poster_path}/>
-                                            <div className='movie-infor'>
-                                                {movie.title}<p/>
-                                                Khởi chiếu: {new Date(movie.release_date).toLocaleDateString()}
-                                                </div>
-                                        </a>
-                                   </div>
-                                    
-                                    
-                                </Col>
-                                
-                            </React.Fragment>
-                                
-                        ))}
-                        </Row>
-                    </div>
-                        :<Skeleton loading={true}/>
-                }
-            
-            </div>
         </div>
     )
 }
