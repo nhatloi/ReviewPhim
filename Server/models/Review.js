@@ -10,6 +10,9 @@ const Review = new mongoose.Schema({
     description: {
         type: String,
     },
+    poster: {
+        type: String,
+    },
     title: {
         type: String,
     },

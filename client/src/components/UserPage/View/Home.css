@@ -44,3 +44,17 @@
 .row-1 .colunm-2 h2{
    font-size: 24px;
 }
+
+.row-2 {
+    height: 700px;
+    margin: auto;
+    padding: 25px;
+    font-family:serif;
+    text-align: center;
+}
+.row-2 .list-movie{
+    height: 400px;
+    display: flex;
+    overflow: hidden;
+    overflow-x: auto;
+}

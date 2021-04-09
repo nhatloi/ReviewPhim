@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkbox } from 'antd';
+import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkbox,Tag } from 'antd';
 import {useSelector} from 'react-redux'
 import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
 import axios from 'axios'
@@ -11,6 +11,8 @@ function Review() {
      const [results, setresults] = useState([])
      const token = useSelector(state => state.token)
      const user = useSelector(state => state.auth.user)
+     const [poster, setposter] = useState('')
+     const [keywords, setkeywords] = useState([])
      const [view, setview] = useState([])
      const [isModalVisible, setIsModalVisible] = useState(false);
      const [searching, setsearching] = useState(0)
@@ -45,6 +47,15 @@ function Review() {
           {
             title: 'keywords',
             dataIndex: 'keywords',
+            render:result => (
+                <>
+                  {result.map(item => (
+                    <Tag color="blue" key={item}>
+                      {item}
+                    </Tag>
+                  ))}
+                </>
+              )
           },
 
         {
@@ -53,7 +64,7 @@ function Review() {
             key: "x",
             render: () =>
                 <div>
-                    <Button icon={<DeleteOutlined />} onclick={Deletehandle}>Delete</Button>
+                     <Button icon={<DeleteOutlined/>} onClick={Deletehandle}>Delete</Button>
                 </div>
           },
       ];
@@ -106,7 +117,7 @@ function Review() {
 
     const handleOkDelete = async () => {
         try {
-            await axios.delete(`/news/deletenews/${viewinfor._id}`,{
+            await axios.delete(`/review/delete/${viewinfor._id}`,{
                 headers:{Authorization:token}
             })
             localStorage.setItem('updatePage',true)
@@ -140,6 +151,7 @@ function Review() {
       ];
     const  handleView = async(e) => {
         const res = await axios.get('/review/getdetail',{headers:{url:e.source}})   
+        setposter(e.img)
         setreadmore(res.data.review)
         setvisible(!visible);
       };
@@ -150,7 +162,7 @@ function Review() {
           
     const  handleOk = async() => {
         try {
-            const res = await axios.post('/review/addreview',{WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
+            const res = await axios.post('/review/addreview',{keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
             message.success(res.data.msg)
             Reviews_eff()
         setvisible(!visible);
@@ -159,6 +171,16 @@ function Review() {
         }
         
       };
+         
+      const  ChangeKeywords = async(e) => {
+        try {
+            setkeywords(e)
+        } catch (error) {
+            message.error(error.response.data.msg)
+        }
+        
+      };
+      
 
     return (
         <div>
@@ -224,7 +246,7 @@ function Review() {
                             ))}
 
                             {readmore.keywords?
-                                    <Checkbox.Group options={readmore.keywords} />:null}
+                                    <Checkbox.Group options={readmore.keywords} onChange={ChangeKeywords}/>:null}
                         </div>
                         
                     </Modal>

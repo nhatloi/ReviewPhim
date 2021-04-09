@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import ReactPlayer from 'react-player/youtube'
 import axios from 'axios'
+import {Col} from 'antd'
 import './Home.css'
 
 function Home() {
@@ -24,7 +25,9 @@ function Home() {
 
     return (
         <div className='contaier'>
+            <hr/>
             <h2>Trailer</h2>
+            <hr/>
             {Movies.length && Movies.length>6?
                 <div className='trailer'>
                 <div className='row-1'>
@@ -41,7 +44,7 @@ function Home() {
                                         />
                                 <div className='information'>
                                 <h2> Trailer : {Movies[0].title}</h2>
-                                    Xem thêm
+                                 
                                 </div>
                             </div>
                         <div className='videotrailer'>
@@ -56,7 +59,7 @@ function Home() {
                                     />
                             <div className='information'>
                                 <h2> Trailer : {Movies[1].title}</h2>
-                                Xem thêm
+                               
                             </div>
                         </div>
 
@@ -79,7 +82,7 @@ function Home() {
                                             />
                                     <div className='information'>
                                     <h2> Trailer : {Movies[2].title}</h2>
-                                        Xem thêm
+                                   
                                     </div>
                                 </div>
 
@@ -95,7 +98,7 @@ function Home() {
                                         />
                                 <div className='information'>
                                     <h2> Trailer : {Movies[3].title}</h2>
-                                    Xem thêm
+                            
                                 </div>
                             </div>
                         </div>
@@ -112,7 +115,7 @@ function Home() {
                                         />
                                 <div className='information'>
                                     <h2> Trailer : {Movies[4].title}</h2>
-                                    Xem thêm
+                                 
                                 </div>
                             </div>
 
@@ -128,7 +131,7 @@ function Home() {
                                         />
                                 <div className='information'>
                                     <h2> Trailer : {Movies[5].title}</h2>
-                                    Xem thêm
+                                    
                                 </div>
                             </div>
                         </div>
@@ -140,10 +143,41 @@ function Home() {
 
                     
                 </div>
-
+                <hr/>
+                <div>
+                        <h2>Movies</h2>
+                    </div>
+                    <hr/>
                 <div className='row-2'>
-                        
+                    <div className='list-movie'>
+                    {Movies && Movies.map((movie, index) => (
+                                <React.Fragment key={index}>
+                                <Col span={4} >
+                                    <div>
+                                        <label>{movie.episode}</label>
+                                            <a href={`/movie/${movie._id}`}>
+                                                <img alt ='poster' src={movie.poster_path}/>
+                                                <div className='movie-infor'>
+                                                    {movie.title}<p/>
+                                                    Khởi chiếu: {new Date(movie.release_date).toDateString()}
+                                                    </div>
+                                            </a>
+                                    </div>
+                                        
+                                    </Col>
+                                    
+                                </React.Fragment>
+                                    
+                            ))}   
+                    </div>
+                            
+                    <div>View More</div>
                 </div>
+                <hr/>
+                <div>
+                        <h2>Reviews</h2>
+                    </div>
+                    <hr/>
             </div>:
             null
             }

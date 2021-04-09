@@ -7,5 +7,6 @@ router.get('/getallreviews', ReviewCtrl.GetallReview)
 router.get('/getreviews', ReviewCtrl.GetReviews)
 router.get('/getdetail', ReviewCtrl.GetDetailReview)
 router.post('/addreview',auth,authAdmin,ReviewCtrl.AddReview)
+router.delete('/delete/:id',auth,authAdmin,ReviewCtrl.DeleteReview)
 
 module.exports = router

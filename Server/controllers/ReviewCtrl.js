@@ -74,10 +74,10 @@ const ReviewCtrl = {
 
     AddReview : async (req,res) =>{
         try {
-            const {WriterId,description,post_date,content,keywords} = req.body
-            const check_result = await Review.findOne({WriterId,description,post_date,content})
+            const {WriterId,poster,description,post_date,content,keywords} = req.body
+            const check_result = await Review.findOne({WriterId,poster,description,post_date,content})
             if(check_result) return res.status(400).json({msg:'this Review already exists!'})
-            const newResult = new Review({WriterId,description,post_date,content,keywords})
+            const newResult = new Review({WriterId,description,poster,post_date,content,keywords})
             await newResult.save();
             res.json({msg:"Review Added!"})
         } catch (error) {
@@ -96,6 +96,15 @@ const ReviewCtrl = {
             return res.status(500).json({msg: error.message})
         }
     },
+    DeleteReview : async (req,res) =>{
+        try {
+            await Review.findByIdAndDelete(req.params.id)
+            res.json({msg:'Delete Review successfully!'})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
 }
 
 function removeStop(text,stopwords){
