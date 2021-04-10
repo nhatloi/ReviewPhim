@@ -7,16 +7,37 @@ import './Home.css'
 function Home() {
 
     const [Movies, setMovies] = useState([])
+    const [news, setnews] = useState([])
+    const [reviews, setreviews] = useState([])
     const nullvideo = 'https://www.youtube.com/watch?v=TY3IAqm-gpE'
 
     useEffect(() => {
         movies_eff()
+        news_eff()
+        Reviews_eff()
     }, [])
 
     const movies_eff = async() =>{
         try{
             const res = await axios.get('/movie/getallmovie')
             setMovies(res.data.movie)
+        }catch (error) {
+            console.log(error);
+        }
+    }
+
+    const news_eff = async() =>{
+        try{
+            const res = await axios.get('/news/get_allnews')
+            setnews(res.data.news)
+        }catch (error) {
+            console.log(error);
+        }
+    }
+    const Reviews_eff = async() =>{
+        try{
+            const res = await axios.get('/review/getallreviews')
+            setreviews(res.data.review)
         }catch (error) {
             console.log(error);
         }
@@ -157,7 +178,7 @@ function Home() {
                                         <label>{movie.episode}</label>
                                             <a href={`/movie/${movie._id}`}>
                                                 <img alt ='poster' src={movie.poster_path}/>
-                                                <div className='movie-infor'>
+                                                <div className='infor'>
                                                     {movie.title}<p/>
                                                     Khởi chiếu: {new Date(movie.release_date).toDateString()}
                                                     </div>
@@ -171,13 +192,51 @@ function Home() {
                             ))}   
                     </div>
                             
-                    <div>View More</div>
                 </div>
                 <hr/>
                 <div>
-                        <h2>Reviews</h2>
+                        <h2>Reviews - News</h2>
                     </div>
                     <hr/>
+                    <div className='row-2'>
+                    <div className='list-review'>
+                    {reviews && reviews.map((review, index) => (
+                        <a href='/'>
+                             <div className='review-card'>
+                                        <div><img src={review.poster}/></div>
+                                        <div className='infor'>{review.description}<p/>
+                                        <div style={{color:'gray',fontSize:'20px'}}>
+                                        {review.keywords && review.keywords.map((keyword, index) => (
+                                            `#${keyword} `
+                                        ))}
+                                        </div>
+                                          </div> 
+                                    </div>
+                        </a>
+                                   
+                                    
+                            ))}   
+                    </div>
+                    <div className='list-news'>
+                    {news && news.map((item, index) => (
+                        <a href={item.link}>
+                             <div className='news-card'>
+                                        <div><img src={item.img}/></div>
+                                        <div className='infor'>{item.description}<p/>
+                                        <div style={{color:'gray',fontStyle:'italic',fontSize:'10px'}}>
+                                            {item.source}-{new Date(item.time).toDateString()}
+                                        </div>
+                                        </div>
+                                    </div>
+                        </a>
+                                   
+                                    
+                            ))}   
+                    </div>
+
+
+                            
+                </div>
             </div>:
             null
             }

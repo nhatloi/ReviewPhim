@@ -58,10 +58,11 @@ const NewCtrl = {
     GetAllNews : async (req,res) =>{
         try {
             News.
-                find().populate('WriterId').
+                find().sort('-time').populate('WriterId').
                 exec(function (err, news) {
                     if (err) return handleError(err);
                     return res.json({news:news})
+
                 });
 
           

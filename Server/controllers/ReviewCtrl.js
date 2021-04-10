@@ -4,6 +4,7 @@ const cheerio = require('cheerio');
 const Review = require('../models/Review');
     const fs = require("fs");
 const url= "https://www.gocdienanh.com/review-phim/"
+const url2= "https://reviewchodzui.com/category/phim-viet-nam/"
 
 const fetchData = async(url) =>{
     const result = await axios.get(url)
@@ -72,6 +73,68 @@ const ReviewCtrl = {
          }    
      },
 
+     GetReviewsKhenphim : async (req,res) =>{
+        const page = req.header("page")
+       try{
+            const content = await fetchData(`${url2}page/${page}/`)
+            const $ =cheerio.load(content)
+            const reviews=[]
+
+            const article = $('.inner-wrapper');
+            $('.article-wrap-inner').each((i,e)=>{
+                const source = $(e).find('.featured-thumb>a').attr('href');
+                const img = $(e).find('.featured-thumb>a>img').attr('src');
+                const description = $(e).find('.content-wrap-inner>header.entry-header>h3').text();
+                oneReview ={
+                    description:description,
+                    source:source,
+                    img:img,
+                }
+                reviews.push(oneReview)
+            })
+            
+            res.json({reivew:reviews})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    GetDetailReviewKhenphim : async (req,res) =>{
+        const url = req.header("url")
+        try{
+            const content = await fetchData(url)
+            const $ =cheerio.load(content)
+            let review = {
+                title:'',
+                description :'',
+                post_date:'',
+                content : [],
+                keywords:[],
+              };
+        
+            review.title = $('header.entry-header').find('h1').text();
+            review.post_date = $('header.entry-header').find('time.entry-date').text();
+            review.description = $('.entry-content > blockquote').find('strong').text();
+            $('p').filter((i,e)=>{
+                if($(e).attr('style') === 'text-align: justify;'){
+                    review.content.push($(e).text());
+                }
+                if($(e).find('img').attr('loading') == 'lazy')
+                    review.content.push(`(img) ${$(e).find('img').attr('src')}`);
+                })
+            review.content.pop();
+
+            var text = review.content;
+            var stopwords = fs.readFileSync('stopwords.txt');
+            text = await removeStop(text,stopwords);
+            review.keywords =await extract_keywords(text,20);
+
+            res.json({review:review})
+            } catch (error) {
+             return res.status(500).json({msg: error.message})
+         }    
+     },
+
     AddReview : async (req,res) =>{
         try {
             const {WriterId,poster,description,post_date,content,keywords} = req.body
@@ -87,7 +150,7 @@ const ReviewCtrl = {
     GetallReview : async (req,res) =>{
         try {
             Review.
-            find().
+            find().sort('post_date').
             exec(function (err, reviews) {
                 if (err) return handleError(err);
                 return res.json({review:reviews})

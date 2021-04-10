@@ -139,7 +139,7 @@ function Review() {
     const ColumnsList = [
         {
             dataIndex: 'img',
-            render: result =><img src={result}/> 
+            render: result =><img src={result} style={{width:'400px'}}/> 
           },
         {
           dataIndex: '',
@@ -232,15 +232,7 @@ function Review() {
                                 <div className='review-content'>
                                     {line.slice(0,5)==='(img)'?
                                     <img alt='line' src={line.slice(6,line.length)}/>
-                                    :null
-                                    }
-                                    {line.slice(0,5)!=='(img)' && index !== readmore.content.length-1?
-                                    line
-                                    :null
-                                    }
-                                    {line.slice(0,5)!=='(img)' && index === readmore.content.length-1?
-                                    `--${line}--`
-                                    :null
+                                    :line
                                     }
                                 </div>
                             ))}

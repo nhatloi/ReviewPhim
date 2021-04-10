@@ -140,7 +140,7 @@ function News() {
             localStorage.setItem('updatePage',true)
             News_eff();
         } catch (error) {
-            message.warning(error.response.data.msg)
+            message.warning('add fail!')
         }
     }
 

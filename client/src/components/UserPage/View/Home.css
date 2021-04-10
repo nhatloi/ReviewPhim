@@ -46,15 +46,65 @@
 }
 
 .row-2 {
-    height: 700px;
+    display: flex;
     margin: auto;
     padding: 25px;
     font-family:serif;
     text-align: center;
 }
 .row-2 .list-movie{
-    height: 400px;
     display: flex;
     overflow: hidden;
     overflow-x: auto;
 }
+
+.list-review{
+    width: 70%;
+    display: block;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+
+.list-review .review-card{
+    margin: 10px;
+    display: flex;
+    width: 100%;
+    font-family:serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 25px;
+    color: black;
+}
+.list-review .review-card :hover{
+    color: red;
+}
+.list-review .review-card .infor{
+    margin-left: 10px;
+}
+
+.list-news{
+    height: 1000px;
+    width: 30%;
+    display: block;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.list-news .news-card{
+    margin: 10px;
+    display: flex;
+    width: 100%;
+    font-family:serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+}
+
+.list-news .news-card :hover{
+    color: red;
+}
+.list-news .news-card .infor{
+    margin-left: 10px;
+}
+

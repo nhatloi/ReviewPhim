@@ -73,7 +73,7 @@ function NavHeader() {
     // Render
     return (
         <div className='header'>
-            <Navbar light expand="md">
+            <Navbar light expand="md" sticky="top">
         <NavbarBrand href="/">
             <img alt='logo' src={logo}/>
             FRadar</NavbarBrand>
