@@ -64,7 +64,8 @@ function Home() {
                                         height='100%'
                                         />
                                 <div className='information'>
-                                <h2> Trailer : {Movies[0].title}</h2>
+                                    <a href={`/movie/${Movies[0]._id}`}><h2> Trailer : {Movies[0].title}</h2></a>
+                                
                                  
                                 </div>
                             </div>
@@ -79,7 +80,7 @@ function Home() {
                                     height='100%'
                                     />
                             <div className='information'>
-                                <h2> Trailer : {Movies[1].title}</h2>
+                            <a href={`/movie/${Movies[1]._id}`}><h2> Trailer : {Movies[1].title}</h2></a>
                                
                             </div>
                         </div>
@@ -102,7 +103,7 @@ function Home() {
                                             height='70%'
                                             />
                                     <div className='information'>
-                                    <h2> Trailer : {Movies[2].title}</h2>
+                                    <a href={`/movie/${Movies[2]._id}`}><h2> Trailer : {Movies[2].title}</h2></a>
                                    
                                     </div>
                                 </div>
@@ -118,7 +119,7 @@ function Home() {
                                         height='70%'
                                         />
                                 <div className='information'>
-                                    <h2> Trailer : {Movies[3].title}</h2>
+                                <a href={`/movie/${Movies[3]._id}`}><h2> Trailer : {Movies[3].title}</h2></a>
                             
                                 </div>
                             </div>
@@ -135,7 +136,7 @@ function Home() {
                                         height='70%'
                                         />
                                 <div className='information'>
-                                    <h2> Trailer : {Movies[4].title}</h2>
+                                <a href={`/movie/${Movies[4]._id}`}><h2> Trailer : {Movies[4].title}</h2></a>
                                  
                                 </div>
                             </div>
@@ -151,7 +152,7 @@ function Home() {
                                         height='70%'
                                         />
                                 <div className='information'>
-                                    <h2> Trailer : {Movies[5].title}</h2>
+                                <a href={`/movie/${Movies[5]._id}`}><h2> Trailer : {Movies[5].title}</h2></a>
                                     
                                 </div>
                             </div>

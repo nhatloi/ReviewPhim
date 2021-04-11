@@ -7,10 +7,8 @@ import Comments from './Sections/Comments'
 import LikeDislikes from './Sections/LikeDislikes';
 import {
     PlayCircleOutlined,
-    LikeOutlined,
-    DislikeOutlined
   } from '@ant-design/icons';
-import { Button,Comment, Avatar,Form, List, Input,Rate} from 'antd'
+import { Button,Input,Rate} from 'antd'
 const { TextArea } = Input;
 
 function MovieDetail(props) {
@@ -20,7 +18,6 @@ function MovieDetail(props) {
     const [movie, setmovie] = useState([])
     const [CommentLists, setCommentLists] = useState([])
     const user = useSelector(state => state.auth.user)
-    const [loadcomment, setloadcomment] = useState(0)
     const [viewComment, setviewComment] = useState(false)
 
     useEffect(() => {
@@ -63,7 +60,7 @@ function MovieDetail(props) {
                 <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
                 <div className='likedislike'>
                     <LikeDislikes video videoId={id} userId={user._id} /> <a href="#trailer"><PlayCircleOutlined/>Trailer</a>
-                    <Button style={{background:'transparent',color:'white'}} onClick={()=>{setviewComment(!viewComment)}}>Comment</Button><p/>
+                    <a href='#comment'> Comment<p/></a>
                 </div>
                 </p>
                 <img style={{height:"500px",width:"300px",opacity:'1',float:'right'}} src={movie.poster_path}/>
@@ -73,22 +70,22 @@ function MovieDetail(props) {
              <div className='poster'>
             </div>
             </div>
-            {
-                viewComment?
+             <div id='trailer' className="detail-trailer">
+                 <div style={{width:'70%'}}>
+                    <ReactPlayer url={movie.trailer}
+                    height='100%'
+                    width='100%' 
+                    playIcon
+                    controls={true}  
+                    />
+                 </div>
+                <div className='People_view'>
+                    People also view
+                </div>
+            </div>
                     <div id='comment' className="detail-comment">
                     <Comments CommentLists={CommentLists} postId={movie._id} refreshFunction={fetchData} />
                 </div>
-                :
-                null
-            }
-             <div id='trailer' className="detail-trailer">
-                <ReactPlayer url={movie.trailer}
-                height='100%'
-                width='100%' 
-                playIcon
-                controls={true}  
-                />
-            </div>
         </div>
     )
 }

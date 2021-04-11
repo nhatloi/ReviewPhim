@@ -142,9 +142,9 @@ function Review() {
             render: result =><img src={result} style={{width:'400px'}}/> 
           },
         {
-          dataIndex: '',
+          dataIndex: 'description',
           width:"60%",
-          render: result =><div><a style={{color:'black'}}>{result.description}</a>
+          render: result =><div><a style={{color:'black'}}>{result}</a>
           </div>
 
         },

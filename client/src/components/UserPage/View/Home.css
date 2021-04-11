@@ -79,6 +79,9 @@
 .list-review .review-card :hover{
     color: red;
 }
+.list-review .review-card img{
+    width: 300px;
+}
 .list-review .review-card .infor{
     margin-left: 10px;
 }
