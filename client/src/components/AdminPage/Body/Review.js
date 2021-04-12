@@ -3,17 +3,15 @@ import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkb
 import {useSelector} from 'react-redux'
 import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
 import axios from 'axios'
+import AddNewReview from './commons/AddNewReview'
+
 const { Text} = Typography;
-const { Option } = Select;
 
 function Review() {
 
      //const
      const [results, setresults] = useState([])
      const token = useSelector(state => state.token)
-     const user = useSelector(state => state.auth.user)
-     const [poster, setposter] = useState('')
-     const [keywords, setkeywords] = useState([])
      const [view, setview] = useState([])
      const [isModalVisible, setIsModalVisible] = useState(false);
      const [searching, setsearching] = useState(0)
@@ -23,8 +21,7 @@ function Review() {
      const [totalResutls, settotalResutls] = useState()
      const [readmore, setreadmore] = useState([])
      const [visible, setvisible] = useState(false)
-     const [movies, setmovies] = useState([])
-     const [tag, settag] = useState('none')
+     const [poster, setposter] = useState('')
      const Loading = (
         <div>
             <Skeleton.Image active={true} /> 
@@ -80,17 +77,8 @@ function Review() {
       useEffect(() => {
         Reviews_eff()
         Get_Reviews_eff()
-        Movies_eff()
-    }, [page])
+    }, [page,visible])
 
-    const Movies_eff = async() =>{
-        try{
-            const res = await axios.get('/movie/getallmovie')
-            setmovies(res.data.movie)
-        }catch (error) {
-            message.error(error.response.data.msg)
-        }
-    }
 
     const Reviews_eff = async() =>{
         try{
@@ -183,46 +171,7 @@ function Review() {
         setvisible(!visible);
       };
     
-    const  handleCancel = () => {
-        setvisible(!visible);
-      };
-          
-    const  handleOk = async() => {
-        try {
-            if(tag === 'none'){
-                const res = await axios.post('/review/addreview',{keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
-                message.success(res.data.msg)
-            }
-            else {
-                const res = await axios.post('/review/addreview',{movie:tag,keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
-                message.success(res.data.msg)
-            }
-            
-            Reviews_eff()
-        setvisible(!visible);
-        } catch (error) {
-            message.error(error.response.data.msg)
-        }
-        
-      };
-         
-      const  ChangeKeywords = async(e) => {
-        try {
-            setkeywords(e)
-        } catch (error) {
-            message.error(error.response.data.msg)
-        }
-        
-      };
-
-      const  handleChange = (e) => {
-        try {
-            settag(e)
-        } catch (error) {
-            message.error(error.response.data.msg)
-        }
-        
-      };
+    
       
 
     return (
@@ -245,8 +194,9 @@ function Review() {
                     </Modal>
 
             </div>
-            <div className='list-review'>
+            <div >
                 <h2 style={{textAlign:'center'}}><Text>Add New</Text></h2>
+                <Button onClick={()=>{}}>Custom</Button>
                 <Table bordered={true} columns={ColumnsList}  pagination={false} dataSource={ListReview} 
                     onRow={(record, rowIndex) => {
                         return {
@@ -258,41 +208,10 @@ function Review() {
                     />
 
                     <Pagination defaultCurrent={1} total={totalResutls*10} onChange={ChangePage} />
+
+                    
                 </div>
-                <Modal
-                    width='80%'
-                    visible={visible}
-                    title={readmore.title}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                    >
-                        <div className='Page-review'>
-                            <div style={{fontFamily:'sans-serif',color:'gray',fontStyle:'oblique'}}>
-                                {readmore.description}<p/>
-                                {readmore.post_date}<p/>
-                                </div>
-                            {readmore.content && readmore.content.map((line, index) => (
-                                <div className='review-content'>
-                                    {line.slice(0,5)==='(img)'?
-                                    <img alt='line' src={line.slice(6,line.length)}/>
-                                    :line
-                                    }
-                                </div>
-                            ))}
-                            <div>
-                                <h2>Tag</h2>
-                                <Select defaultValue='none' style={{ width: 120 }} onChange={handleChange}>
-                                <Option value="none">None</Option>
-                                {movies && movies.map((movie, index) => (
-                                    <Option value={movie._id}>{movie.title}</Option>
-                            ))}
-                                </Select>
-                            </div>
-                            {readmore.keywords?
-                                    <Checkbox.Group options={readmore.keywords} onChange={ChangeKeywords}/>:null}
-                        </div>
-                        
-                    </Modal>
+                    <AddNewReview readmore = {readmore} visible={visible} poster={poster} handle ={setvisible}/>
         </div>
     )
 }
