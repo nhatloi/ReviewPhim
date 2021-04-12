@@ -1,9 +1,10 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkbox,Tag } from 'antd';
+import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkbox,Tag,Select } from 'antd';
 import {useSelector} from 'react-redux'
 import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
 import axios from 'axios'
 const { Text} = Typography;
+const { Option } = Select;
 
 function Review() {
 
@@ -22,6 +23,8 @@ function Review() {
      const [totalResutls, settotalResutls] = useState()
      const [readmore, setreadmore] = useState([])
      const [visible, setvisible] = useState(false)
+     const [movies, setmovies] = useState([])
+     const [tag, settag] = useState('none')
      const Loading = (
         <div>
             <Skeleton.Image active={true} /> 
@@ -34,6 +37,11 @@ function Review() {
           title: 'description',
           dataIndex: 'description',
         },
+        {
+            title: 'Movie tag',
+            dataIndex: 'movie',
+            render: result =><div>{result?result.title:null}</div>
+          },
           {
             title: 'content',
             dataIndex: 'content',
@@ -72,7 +80,17 @@ function Review() {
       useEffect(() => {
         Reviews_eff()
         Get_Reviews_eff()
+        Movies_eff()
     }, [page])
+
+    const Movies_eff = async() =>{
+        try{
+            const res = await axios.get('/movie/getallmovie')
+            setmovies(res.data.movie)
+        }catch (error) {
+            message.error(error.response.data.msg)
+        }
+    }
 
     const Reviews_eff = async() =>{
         try{
@@ -100,12 +118,21 @@ function Review() {
         else setsearching(1)
         var count=[];
         results.forEach(element => {
-            if(element.WriterId.name.toLowerCase().search(str) != -1
-            ||element.description.toLowerCase().search(str) != -1
-            ||element.source.toLowerCase().search(str) != -1
+            if(element.movie)
+                if(element.movie.title.toLowerCase().search(str) != -1
+                ||element.description.toLowerCase().search(str) != -1
+                ||element.keywords.join(' ').toLowerCase().search(str) != -1
+              
             ){
                 count.push(element);
             }
+            if(!element.movie)
+                if(element.description.toLowerCase().search(str) != -1
+                ||element.keywords.join(' ').toLowerCase().search(str) != -1
+            ){
+                count.push(element);
+            }
+
         });
         setview(count);
       }
@@ -162,8 +189,15 @@ function Review() {
           
     const  handleOk = async() => {
         try {
-            const res = await axios.post('/review/addreview',{keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
-            message.success(res.data.msg)
+            if(tag === 'none'){
+                const res = await axios.post('/review/addreview',{keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
+                message.success(res.data.msg)
+            }
+            else {
+                const res = await axios.post('/review/addreview',{movie:tag,keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
+                message.success(res.data.msg)
+            }
+            
             Reviews_eff()
         setvisible(!visible);
         } catch (error) {
@@ -175,6 +209,15 @@ function Review() {
       const  ChangeKeywords = async(e) => {
         try {
             setkeywords(e)
+        } catch (error) {
+            message.error(error.response.data.msg)
+        }
+        
+      };
+
+      const  handleChange = (e) => {
+        try {
+            settag(e)
         } catch (error) {
             message.error(error.response.data.msg)
         }
@@ -236,7 +279,15 @@ function Review() {
                                     }
                                 </div>
                             ))}
-
+                            <div>
+                                <h2>Tag</h2>
+                                <Select defaultValue='none' style={{ width: 120 }} onChange={handleChange}>
+                                <Option value="none">None</Option>
+                                {movies && movies.map((movie, index) => (
+                                    <Option value={movie._id}>{movie.title}</Option>
+                            ))}
+                                </Select>
+                            </div>
                             {readmore.keywords?
                                     <Checkbox.Group options={readmore.keywords} onChange={ChangeKeywords}/>:null}
                         </div>

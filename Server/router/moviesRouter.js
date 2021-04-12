@@ -14,6 +14,4 @@ router.get('/getmoviebyid/:id',moviesCtrl.GetMovieById)
 router.delete('/delete/:id',auth,authAdmin,moviesCtrl.DeleteMovie)
 router.delete('/delete_all',auth,authAdmin,moviesCtrl.DeleteAllMovie)
 
-
-
 module.exports = router

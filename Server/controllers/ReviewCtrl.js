@@ -137,10 +137,10 @@ const ReviewCtrl = {
 
     AddReview : async (req,res) =>{
         try {
-            const {WriterId,poster,description,post_date,content,keywords} = req.body
-            const check_result = await Review.findOne({WriterId,poster,description,post_date,content})
+            const {WriterId,poster,description,post_date,content,keywords,movie} = req.body
+            const check_result = await Review.findOne({WriterId,poster,description,post_date,content,movie})
             if(check_result) return res.status(400).json({msg:'this Review already exists!'})
-            const newResult = new Review({WriterId,description,poster,post_date,content,keywords})
+            const newResult = new Review({WriterId,description,poster,post_date,content,keywords,movie})
             await newResult.save();
             res.json({msg:"Review Added!"})
         } catch (error) {
@@ -151,6 +151,7 @@ const ReviewCtrl = {
         try {
             Review.
             find().sort('post_date').
+            populate('movie').
             exec(function (err, reviews) {
                 if (err) return handleError(err);
                 return res.json({review:reviews})

@@ -7,6 +7,10 @@ const Review = new mongoose.Schema({
         ref: 'User',
         required:[true,'please enter fields'],
     },
+    movie: {
+        type: Schema.Types.ObjectId,
+        ref: 'Movie',
+    },
     description: {
         type: String,
     },
