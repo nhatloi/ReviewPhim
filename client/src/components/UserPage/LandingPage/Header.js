@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import {useSelector} from 'react-redux'
 import axios from 'axios';
-import logo from '../../../access/images/Logo.png';  
+import logo from '../../../assets/img/Logo.png';
 import {BackTop , Menu, Dropdown,Input} from 'antd';
 import {
     Collapse,
@@ -85,7 +85,7 @@ function NavHeader() {
               <NavLink href="/">Home</NavLink>
             </NavItem>
           <NavItem>
-              <NavLink href="/movies">Movies</NavLink>
+              <NavLink href="/movie">Movies</NavLink>
             </NavItem>
             <NavItem>
               <NavLink href="/news">News</NavLink>

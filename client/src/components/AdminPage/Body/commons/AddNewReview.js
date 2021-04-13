@@ -1,7 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import { Checkbox,Select ,message,Modal} from 'antd';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
 import {useSelector} from 'react-redux'
+
+
 
 const {Option} = Select;
 
@@ -12,6 +16,8 @@ function AddNewReview(props) {
     const [movies, setmovies] = useState([])
     const [keywords, setkeywords] = useState([])
     const [tag, settag] = useState('none')
+    const [content, setcontent] = useState([])
+
 
 
     useEffect(() => {
@@ -30,7 +36,24 @@ function AddNewReview(props) {
             message.error(error.response.data.msg)
         }
     }
-          
+    
+
+    const  handlecustom = async() => {
+        try {
+            // if(tag === 'none'){
+            //     const res = await axios.post('/review/addreview',{keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
+            //     message.success(res.data.msg)
+            // }
+            // else {
+            //     const res = await axios.post('/review/addreview',{movie:tag,keywords:keywords,poster:poster,WriterId:user._id,description:readmore.description,post_date:readmore.post_date,content:readmore.content},{headers:{Authorization:token}})   
+            //     message.success(res.data.msg)
+            // }
+            handle(!visible);
+        } catch (error) {
+            message.error(error.response.data.msg)
+        }
+        
+      };
     const  handleOk = async() => {
         try {
             if(tag === 'none'){
@@ -66,6 +89,7 @@ function AddNewReview(props) {
         
       };
 
+    if(!custom)
     return (
         <div>
             <Modal
@@ -105,6 +129,34 @@ function AddNewReview(props) {
                 </Modal>
         </div>
     )
+    else
+
+    return (
+        <div style={{height:'80%'}}>
+            <Modal
+                width='80%'
+                visible={visible}
+                onOk={handlecustom}
+                onCancel={handleCancel}
+                >
+
+                <CKEditor
+                    editor={ ClassicEditor }
+                    data=""
+                    onReady={ editor => {
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        // console.log( { event, editor, data } );
+                        setcontent(data)
+                        console.log(data)
+                    } }
+                />
+              
+                </Modal>
+        </div>
+    )
+
 }
 
 export default AddNewReview

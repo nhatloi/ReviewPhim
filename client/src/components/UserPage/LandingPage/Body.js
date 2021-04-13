@@ -13,7 +13,8 @@ import Successfully from '../../utils/Successfully'
 import News from '../View/News/NewsPage'
 import Home from '../View/Home'
 import Header from './Header'
-import Footer from './Footer'
+// import Footer from './Footer'
+import Footer from '../../Footers/Footer'
 import MovieDetail from '../View/Movie/MovieDetail'
 import Totalmovie from '../View/Movie/Totalmovie'
 
@@ -50,7 +51,7 @@ function Body() {
                         {/* Movie */}
                         <Route exact path="/movie/:id" component={MovieDetail}/>
 
-                        <Route exact path="/movie/total/:key" component={Totalmovie}/>
+                        <Route exact path="/movie" component={Totalmovie}/>
 
 
                         

@@ -27,11 +27,11 @@ function LeftMenu() {
         <div>
             <Menu style={{height:"100vh"}} theme="dark" mode="inline">
                     <div className='user-Admin'>{user.name}</div>
-                    <Menu.Item key="account" icon={<UserOutlined />}><a href='/account'/>Account</Menu.Item>
-                    <Menu.Item key="movies" icon={<VideoCameraOutlined />}><a href='/movies'/>Movies</Menu.Item>
-                    <Menu.Item key="news" icon={<FundOutlined />}><a href='/news'/>News</Menu.Item>
-                    <Menu.Item key="Review" icon={<ForwardOutlined />}><a href='/review'/>Review</Menu.Item>
-                    <Menu.Item key="advertisement" icon={<FundViewOutlined />}><a href='/advertisement'/>Advertisement</Menu.Item>
+                    <Menu.Item key="account" icon={<UserOutlined />}><a href='/adm/account'/>Account</Menu.Item>
+                    <Menu.Item key="movies" icon={<VideoCameraOutlined />}><a href='/adm/movies'/>Movies</Menu.Item>
+                    <Menu.Item key="news" icon={<FundOutlined />}><a href='/adm/news'/>News</Menu.Item>
+                    <Menu.Item key="Review" icon={<ForwardOutlined />}><a href='/adm/review'/>Review</Menu.Item>
+                    <Menu.Item key="advertisement" icon={<FundViewOutlined />}><a href='/adm/advertisement'/>Advertisement</Menu.Item>
                 <Menu.Item onClick={handleLogout} key="logout" icon={<PoweroffOutlined />}>
                     Logout
                     </Menu.Item>

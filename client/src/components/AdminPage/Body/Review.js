@@ -22,6 +22,7 @@ function Review() {
      const [readmore, setreadmore] = useState([])
      const [visible, setvisible] = useState(false)
      const [poster, setposter] = useState('')
+     const [customvisible, setcustomvisible] = useState(false)
      const Loading = (
         <div>
             <Skeleton.Image active={true} /> 
@@ -196,7 +197,7 @@ function Review() {
             </div>
             <div >
                 <h2 style={{textAlign:'center'}}><Text>Add New</Text></h2>
-                <Button onClick={()=>{}}>Custom</Button>
+                <Button onClick={()=>{setcustomvisible(!customvisible)}}>Custom</Button>
                 <Table bordered={true} columns={ColumnsList}  pagination={false} dataSource={ListReview} 
                     onRow={(record, rowIndex) => {
                         return {
@@ -211,6 +212,7 @@ function Review() {
 
                     
                 </div>
+                    <AddNewReview custom visible={customvisible} handle ={setcustomvisible}/>
                     <AddNewReview readmore = {readmore} visible={visible} poster={poster} handle ={setvisible}/>
         </div>
     )

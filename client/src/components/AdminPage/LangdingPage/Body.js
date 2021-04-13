@@ -12,10 +12,10 @@ function Body() {
             <section>
                 <Switch>
                     {/* must login first */}
-                    <Route exact path="/account" component={Account}/>
-                    <Route exact path="/movies" component={Movie}/>
-                    <Route exact path="/news" component={News}/>
-                    <Route exact path="/review" component={Review}/>
+                    <Route exact path="/adm/account" component={Account}/>
+                    <Route exact path="/adm/movies" component={Movie}/>
+                    <Route exact path="/adm/news" component={News}/>
+                    <Route exact path="/adm/review" component={Review}/>
                     <Route exact path="/" component={Account}/>
                 </Switch>
             </section>

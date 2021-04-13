@@ -23,9 +23,9 @@ function Successfully() {
                         </Button>
                     </a>
                 ,
-                <a href='/login'>
+                <a href='/'>
                     <Button type="primary" key="console">
-                        Login?
+                        Home
                     </Button>
                 </a>
                 ]}

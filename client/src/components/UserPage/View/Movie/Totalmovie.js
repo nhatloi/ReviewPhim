@@ -3,22 +3,17 @@ import {Row,Col} from 'antd';
 import axios from 'axios'
 
 
-function Totalmovie(props) {
-    const key = props.match.params.key
+function Totalmovie() {
     const [results, setresults] = useState([])
 
 
     useEffect(() => {
         fetchData();
-    },[key])
+    },[])
 
     const fetchData = async () =>{
         try {
-            var res
-            if(key === 'playing_now')
-                res = await axios.get(`/movie/getplaynow/`)
-            if(key === 'comingsoon')
-                res = await axios.get(`/movie/getcomingsoon/`)
+             const res = await axios.get(`/movie/getallmovie/`)
             setresults(res.data.movie)
         } catch (err) {
            return;
@@ -29,7 +24,6 @@ function Totalmovie(props) {
 
     return (
         <div className='container'>
-            <h2>{key==='playing_now'?'Playing Now' : 'Coming soon'}</h2>
             <div className='list-movies'>
                 <Row gutter={[8, 8]}>
                         {results && results.map((movie, index) => (
@@ -37,7 +31,7 @@ function Totalmovie(props) {
                                <Col span={6} >
                                    <div className='card-movie'>
                                        <label>{movie.episode}</label>
-                                        <a href=''>
+                                        <a href={`/movie/${movie._id}`}>
                                             <img alt ='poster' src={movie.poster_path}/>
                                             <div className='movie-infor'>
                                                 {movie.title}<p/>

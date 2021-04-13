@@ -67,6 +67,7 @@
   },
   "proxy": "http://localhost:4000",
   "devDependencies": {
+    "@ckeditor/ckeditor5-alignment": "^27.0.0",
     "react-alice-carousel": "^2.4.0"
   }
 }
