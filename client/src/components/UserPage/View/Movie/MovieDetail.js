@@ -9,7 +9,6 @@ import {
     PlayCircleOutlined,
   } from '@ant-design/icons';
 import { Button,Input,Rate} from 'antd'
-const { TextArea } = Input;
 
 function MovieDetail(props) {
 

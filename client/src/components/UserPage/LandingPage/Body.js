@@ -16,6 +16,7 @@ import Header from './Header'
 // import Footer from './Footer'
 import Footer from '../../Footers/Footer'
 import MovieDetail from '../View/Movie/MovieDetail'
+import Detail from '../View/Movie/Detail'
 import Totalmovie from '../View/Movie/Totalmovie'
 
 
@@ -50,6 +51,7 @@ function Body() {
                         <Route exact path="/news" component={News}/>
                         {/* Movie */}
                         <Route exact path="/movie/:id" component={MovieDetail}/>
+                        <Route exact path="/movietest" component={Detail}/>
 
                         <Route exact path="/movie" component={Totalmovie}/>
 
