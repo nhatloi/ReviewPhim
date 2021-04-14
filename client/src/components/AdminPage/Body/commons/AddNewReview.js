@@ -22,7 +22,7 @@ function AddNewReview(props) {
 
     useEffect(() => {
         Movies_eff()
-    },)
+    },[])
 
     const  handleCancel = () => {
         handle(!visible);
@@ -150,7 +150,24 @@ function AddNewReview(props) {
                         // console.log( { event, editor, data } );
                         setcontent(data)
                         console.log(data)
-                    } }
+                    }}
+                    config = {
+                        {
+                           // plugins: [ Essentials ],
+                          ckfinder: {
+                              // The URL that the images are uploaded to.
+                              uploadUrl: '/api/img',
+                  
+                              // Enable the XMLHttpRequest.withCredentials property.
+                              withCredentials: true,
+                  
+                              // Headers sent along with the XMLHttpRequest to the upload server.
+
+                        } }
+                
+                
+                }
+                    
                 />
               
                 </Modal>

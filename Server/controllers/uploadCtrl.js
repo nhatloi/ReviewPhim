@@ -47,6 +47,24 @@ const uploadCtrl = {
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
+    },
+
+    uploadImg2 : (req,res) =>{
+        try {
+            
+            const file  = req.files;
+        
+            cloudinary.v2.uploader.upload(file.tempFilePath,{
+                folder: 'img',
+            }, async(err,result) => {
+                if(err) throw err;
+                removeTmp(file.tempFilePath)
+
+                res.json({url:result.secure_url})
+            })
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
     }
     
 }
