@@ -1,9 +1,12 @@
 import React,{useState,useEffect} from 'react'
 import { Checkbox,Select ,message,Modal} from 'antd';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
 import {useSelector} from 'react-redux'
+
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+
 
 
 
@@ -160,6 +163,7 @@ function AddNewReview(props) {
                   
                               // Enable the XMLHttpRequest.withCredentials property.
                               withCredentials: true,
+                              
                   
                               // Headers sent along with the XMLHttpRequest to the upload server.
 
