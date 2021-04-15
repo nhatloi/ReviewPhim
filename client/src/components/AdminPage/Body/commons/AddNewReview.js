@@ -5,10 +5,85 @@ import {useSelector} from 'react-redux'
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+ClassicEditor.builtinPlugins.map( plugin =>console.log( plugin.pluginName) );
 
 
+ClassicEditor.defaultConfig = {
+    
+   
 
+     toolbar: {
+        items: [
+            'heading',
+            '|',
+            'alignment',                                                 // <--- ADDED
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            'uploadImage',
+            'blockQuote',
+            'undo',
+            'redo',
+        ]
+    },
 
+    toolbar: {
+        items: [
+            'heading',
+            '|',
+            'alignment',                                                 // <--- ADDED
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            'uploadImage',
+            'blockQuote',
+            'undo',
+            'redo',
+        ]
+    },
+    image: {
+        toolbar: [
+            'imageStyle:full',
+            'imageStyle:side',
+            '|',    
+            'imageTextAlternative'
+        ]
+    },
+
+    ckfinder: {
+
+        // Upload the images to the server using the CKFinder QuickUpload command.
+        uploadUrl: '/api/img',
+        
+    },
+    autosave: {
+        save( editor ) {
+            return saveData( editor.getData() );
+        }
+    }
+
+};
+
+function saveData( data ) {
+    console.log(data)
+}
+
+function displayStatus( editor ) {
+    const pendingActions = editor.plugins.get( 'PendingActions' );
+    const statusIndicator = document.querySelector( '#editor-status' );
+
+    pendingActions.on( 'change:hasAny', ( evt, propertyName, newValue ) => {
+        if ( newValue ) {
+            statusIndicator.classList.add( 'busy' );
+        } else {
+            statusIndicator.classList.remove( 'busy' );
+        }
+    } );
+}
 
 const {Option} = Select;
 
@@ -143,36 +218,22 @@ function AddNewReview(props) {
                 onCancel={handleCancel}
                 >
 
-                <CKEditor
-                    editor={ ClassicEditor }
-                    data=""
-                    onReady={ editor => {
-                    } }
-                    onChange={ ( event, editor ) => {
-                        const data = editor.getData();
-                        // console.log( { event, editor, data } );
-                        setcontent(data)
-                        console.log(data)
-                    }}
-                    config = {
-                        {
-                           // plugins: [ Essentials ],
-                          ckfinder: {
-                              // The URL that the images are uploaded to.
-                              uploadUrl: '/api/img',
-                  
-                              // Enable the XMLHttpRequest.withCredentials property.
-                              withCredentials: true,
-                              
-                  
-                              // Headers sent along with the XMLHttpRequest to the upload server.
 
+                    <CKEditor
+                        editor={ ClassicEditor }
+
+                        data="<p>Hello from the first editor working with the context!</p>"
+                        onReady={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor1 is ready to use!', editor );
                         } }
-                
-                
-                }
-                    
-                />
+
+                        onChange={ ( event, editor ) => {
+                            const data = editor;
+                            console.log( { event, editor, data } );
+                        } }
+
+                    />
               
                 </Modal>
         </div>
