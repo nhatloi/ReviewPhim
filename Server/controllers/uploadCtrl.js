@@ -45,7 +45,6 @@ const uploadCtrl = {
             }, async(err,result) => {
                 if(err) throw err;
                 removeTmp(file.tempFilePath)
-
                 res.json({url:result.secure_url})
             })
         } catch (err) {
@@ -58,7 +57,6 @@ const uploadCtrl = {
             
             const file  = req.files;
             const TempFilePath = file.tempFilePath;
-            console.log(file)
           
             // cloudinary.v2.uploader.upload(TempFilePath,{
             //     folder: 'img',
@@ -67,6 +65,7 @@ const uploadCtrl = {
             //     removeTmp(TempFilePath)
             //      res.json({url:result.secure_url})
             // })
+            res.status(200).send('test');
 
         } catch (err) {
             return res.status(500).json({msg: err.message})

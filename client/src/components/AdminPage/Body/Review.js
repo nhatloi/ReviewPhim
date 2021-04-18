@@ -1,9 +1,10 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton, Checkbox,Tag,Select } from 'antd';
+import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton,Tag,Drawer } from 'antd';
 import {useSelector} from 'react-redux'
-import { DeleteOutlined,UserOutlined} from '@ant-design/icons';
+import { DeleteOutlined,UserOutlined,FolderViewOutlined} from '@ant-design/icons';
 import axios from 'axios'
 import AddNewReview from './commons/AddNewReview'
+import Information from './commons/Information'
 
 const { Text} = Typography;
 
@@ -21,8 +22,13 @@ function Review() {
      const [totalResutls, settotalResutls] = useState()
      const [readmore, setreadmore] = useState([])
      const [visible, setvisible] = useState(false)
+     const [visibleInfor, setvisibleInfor] = useState(false)
      const [poster, setposter] = useState('')
      const [customvisible, setcustomvisible] = useState(false)
+
+     const handleEdit =() =>{
+        setvisibleInfor (!visibleInfor)
+    }
      const Loading = (
         <div>
             <Skeleton.Image active={true} /> 
@@ -71,6 +77,7 @@ function Review() {
             render: () =>
                 <div>
                      <Button icon={<DeleteOutlined/>} onClick={Deletehandle}>Delete</Button>
+                     <Button icon={<FolderViewOutlined />} onClick={handleEdit}>View</Button>
                 </div>
           },
       ];
@@ -214,6 +221,15 @@ function Review() {
                 </div>
                     <AddNewReview custom visible={customvisible} handle ={setcustomvisible}/>
                     <AddNewReview readmore = {readmore} visible={visible} poster={poster} handle ={setvisible}/>
+                <Drawer
+                width={'80%'}
+                title="Information"
+                placement="right"
+                visible={visibleInfor}
+                onClose={handleEdit}
+                >
+                <Information review infor= {viewinfor}/>
+            </Drawer>
         </div>
     )
 }

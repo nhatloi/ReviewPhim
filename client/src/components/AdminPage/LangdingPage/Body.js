@@ -1,6 +1,6 @@
 import React from 'react'
 import '../AdminPage.css'
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch,Redirect } from "react-router-dom";
 import Account from '../Body/Account'
 import Movie from '../Body/Movie'
 import News from '../Body/News'
@@ -9,7 +9,6 @@ import Review from '../Body/Review'
 function Body() {
     return (
         <div>
-            <section>
                 <Switch>
                     {/* must login first */}
                     <Route exact path="/adm/account" component={Account}/>
@@ -18,7 +17,6 @@ function Body() {
                     <Route exact path="/adm/review" component={Review}/>
                     <Route exact path="/" component={Account}/>
                 </Switch>
-            </section>
         </div>
     )
 }

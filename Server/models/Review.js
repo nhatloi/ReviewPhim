@@ -29,6 +29,10 @@ const Review = new mongoose.Schema({
     keywords: {
         type: Array,
     },
+    state: {
+        type: Boolean,
+        default:false
+    },
 
 },)
 

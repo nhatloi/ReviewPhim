@@ -71,7 +71,6 @@ function Information(props) {
             </div>
         )
     }
-    else{
         if(props.movie)
         {
             return (
@@ -107,8 +106,40 @@ function Information(props) {
                 </div>
             )
         }
+
+        if(props.review)
+        {
+            return (
+                <div>
+                    <Form name="information"  {...layout}  onFinish={OnEditMovie}
+            
+                    >
+                            <Form.Item label="Poster">
+                                <img src={infor.poster} style={{top:'0',left:'0',height:'300px'}}/>
+                            </Form.Item>
+                            <Form.Item label="Description" name="description">
+                                <Input placeholder={infor.description}/>
+                            </Form.Item>
+
+                            <Form.Item label="Content" name="content">
+                            {infor.content && infor.content.map((line, index) => (
+                                <div className='review-content'>
+                                    {line.slice(0,5)==='(img)'?
+                                    <img alt='line' src={line.slice(6,line.length)}/>
+                                    : <TextArea rows={6} placeholder={line}/>
+                                    }
+                                </div>
+                            ))}
+                            </Form.Item>
+                            
+                            <Button type="primary" htmlType="submit">
+                                Save
+                            </Button>
+                        </Form>
+                </div>
+            )
+        }
         
-    }
     
 }
 

@@ -1,7 +1,8 @@
 const axios = require('axios');
-const sw = require('stopword')
+
 const cheerio = require('cheerio');
 const Review = require('../models/Review');
+const User = require('../models/user');
     const fs = require("fs");
 const url= "https://www.gocdienanh.com/review-phim/"
 const url2= "https://reviewchodzui.com/category/phim-viet-nam/"
@@ -73,6 +74,8 @@ const ReviewCtrl = {
          }    
      },
 
+
+
      GetReviewsKhenphim : async (req,res) =>{
         const page = req.header("page")
        try{
@@ -135,12 +138,19 @@ const ReviewCtrl = {
          }    
      },
 
+
+
     AddReview : async (req,res) =>{
         try {
+
             const {WriterId,poster,description,post_date,content,keywords,movie} = req.body
+            var state = false
+            const user = await User.findById(WriterId)
+            if(user.role === 1)
+                state = true;
             const check_result = await Review.findOne({WriterId,poster,description,post_date,content,movie})
             if(check_result) return res.status(400).json({msg:'this Review already exists!'})
-            const newResult = new Review({WriterId,description,poster,post_date,content,keywords,movie})
+            const newResult = new Review({state,WriterId,description,poster,post_date,content,keywords,movie})
             await newResult.save();
             res.json({msg:"Review Added!"})
         } catch (error) {
@@ -150,7 +160,7 @@ const ReviewCtrl = {
     GetallReview : async (req,res) =>{
         try {
             Review.
-            find().sort('post_date').
+            find({state:true}).sort('post_date').
             populate('movie').
             exec(function (err, reviews) {
                 if (err) return handleError(err);

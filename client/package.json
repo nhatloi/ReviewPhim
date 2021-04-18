@@ -18,6 +18,8 @@
     "@tinymce/tinymce-react": "^3.12.2",
     "antd": "^4.9.4",
     "axios": "^0.21.0",
+    "b64-to-file": "^1.0.4",
+    "base64image-to-file": "^1.2.0",
     "blk-design-system-react": "^1.2.0",
     "bootstrap": "^4.5.3",
     "ckeditor4-react": "^1.4.0",

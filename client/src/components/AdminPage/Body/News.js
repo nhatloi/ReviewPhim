@@ -18,14 +18,6 @@ function News() {
      const [searching, setsearching] = useState(0)
      const [newsclick, setnewsclick] = useState()
      const [viewinfor, setviewinfor] = useState()
-     const [visible, setvisible] = useState(false)
-     const [addnew, setaddnew] = useState(false)
-
-     const handleEdit =() =>{
-        setvisible (!visible)
-            if(visible) setaddnew(false)
-
-    }
 
 
     const ColumnsList = [
@@ -37,7 +29,7 @@ function News() {
         {
           dataIndex: '',
           width:"75%",
-          render: result =><div><a style={{color:'black'}} href={result.description}>{result.description}</a>
+          render: result =><div><a style={{color:'black'}} href={result.link} target="_blank">{result.description}</a>
           
             <div style={{color:'gray'}}>{result.source} - {result.time} </div>
           </div>
