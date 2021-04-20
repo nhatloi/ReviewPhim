@@ -1,6 +1,6 @@
 import React from 'react'
 import '../AdminPage.css'
-import { Route, Switch,Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Account from '../Body/Account'
 import Movie from '../Body/Movie'
 import News from '../Body/News'

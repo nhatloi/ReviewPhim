@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { useSelector } from 'react-redux';
 
 function LikeDislikes(props) {
-    const user = useSelector(state => state.auth.user)
+
     const isLogged = useSelector(state => state.auth.isLogged)
 
     const [Likes, setLikes] = useState(0)

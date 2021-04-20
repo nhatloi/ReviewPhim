@@ -24,7 +24,7 @@ function News() {
         {
             dataIndex: 'img',
             width:"120px",
-            render: result =><img src={result}/> 
+            render: result =><img alt='' src={result}/> 
           },
         {
           dataIndex: '',
@@ -144,9 +144,9 @@ function News() {
         else setsearching(1)
         var count=[];
         results.forEach(element => {
-            if(element.WriterId.name.toLowerCase().search(str) != -1
-            ||element.description.toLowerCase().search(str) != -1
-            ||element.source.toLowerCase().search(str) != -1
+            if(element.WriterId.name.toLowerCase().search(str) !== -1
+            ||element.description.toLowerCase().search(str) !== -1
+            ||element.source.toLowerCase().search(str) !== -1
             ){
                 count.push(element);
             }
@@ -184,10 +184,10 @@ function News() {
             <div className='body-container'>
                 <h2><Text underline>News Manager</Text></h2>
                     <Input style={{width:"30%",float:'right'}} size="large" placeholder="Search" prefix={<UserOutlined />} onChange={handleSearch}/>
-                <Table bordered={true} columns={columns} scroll={{ y: 450 }} pagination={{ pageSize: results.length }} dataSource={searching==0?results:view}
+                <Table bordered={true} columns={columns} scroll={{ y: 450 }} pagination={{ pageSize: results.length }} dataSource={searching===0?results:view}
                     onRow={(record, rowIndex) => {
                         return {
-                            onClick: event => {setviewinfor(searching==0?results[rowIndex]:view[rowIndex])}, // click row
+                            onClick: event => {setviewinfor(searching===0?results[rowIndex]:view[rowIndex])}, // click row
                             onContextMenu: event => {}, // right button click row
                         };
                     }}

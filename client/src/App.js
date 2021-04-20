@@ -2,7 +2,7 @@ import React,{useEffect} from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import BodyUser from './components/UserPage/LandingPage/Body'
 
-import {BrowserRouter as Router,Redirect} from 'react-router-dom'
+import {BrowserRouter as Router} from 'react-router-dom'
 import axios from 'axios'
 import {fetchUser,dispatchGetUser,dispatchLogin} from './redux/actions/authAction'
 import {fetchAllUsers,dispatchGetAllUser} from './redux/actions/allUserAction'

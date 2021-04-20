@@ -185,27 +185,52 @@ const moviesCtrl = {
 
             const session = await Session.aggregate([
                 {
-                    $match : { "movie":  {$in: [new mongoose.Types.ObjectId(req.params.id)]}}
+                    $match : { "movie": new mongoose.Types.ObjectId(req.params.id)}
                   },
-                // {
-                //   $group : {
-                //      _id : "$WriterId",
-                //   }
-                // }
+                {
+                  $group : {
+                     _id : "$WriterId",
+                  }
+                }
+            ])
+            const array = []
+            session.forEach(element => {
+                array.push(new mongoose.Types.ObjectId(element._id))
+            });
+            const movieRelate = await Session.aggregate([
+                {
+                    $match : { "WriterId":  {$in: array}}
+                  },
+                {
+                  $group : {
+                     _id : "$movie",
+                     count: { $sum: 1 },
+                  }
+                },
+                {
+                    $sort : { count: -1 }
+                  },
+               ])
+            const array2 = []
+            movieRelate.forEach(element => {
+                if(element._id && element._id!= req.params.id){
+                    array2.push(new mongoose.Types.ObjectId(element._id))
+                }
+            });
+            const results = await Movie.aggregate([
+                {
+                    $match : { "_id":  {$in: array2}}
+                  },
+                  {
+                    $project: {
+                        title: 1,
+                    }
+                  },
+                  {$limit: 5}
+
                ])
 
-            // const movieRelate = await Session.aggregate([
-            //     {
-            //         $match : { "movie":  new mongoose.Types.ObjectId(req.params.id)}
-            //       },
-            //     {
-            //       $group : {
-            //          _id : "$WriterId",
-            //       }
-            //     }
-            //    ])
-            
-            return res.json(session)
+            return res.json(results)
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

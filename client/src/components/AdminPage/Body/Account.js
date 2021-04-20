@@ -1,7 +1,7 @@
 import React ,{useState,useEffect}from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import axios from 'axios'
-import { Table,Typography,message,Drawer,Modal,Input ,Button} from 'antd';
+import { Table,Typography,message,Drawer,Modal,Input } from 'antd';
 import { EyeOutlined,DeleteOutlined,UserOutlined} from '@ant-design/icons';
 import {fetchAllUsers,dispatchGetAllUser} from '../../../redux/actions/allUserAction'
 import Information from './commons/Information'
@@ -51,7 +51,7 @@ function Account() {
         else setsearching(1)
         var count=[];
         users.forEach(element => {
-            if(element.name.toLowerCase().search(e.target.value) != -1 || element.email.toLowerCase().search(e.target.value) != -1){
+            if(element.name.toLowerCase().search(e.target.value) !== -1 || element.email.toLowerCase().search(e.target.value) !== -1){
                 count.push(element);
             }
         });
@@ -99,10 +99,10 @@ function Account() {
             <div style={{width:"300px",float:'right',display:'flex'}}>
               <Input size="large" placeholder="Search" prefix={<UserOutlined />} onChange={handleSearch}/>
             </div>
-            <Table columns={columns}  scroll={{ y: 450 }} pagination={{ pageSize: users.length }} dataSource={searching==0?users:userView}
+            <Table columns={columns}  scroll={{ y: 450 }} pagination={{ pageSize: users.length }} dataSource={searching===0?users:userView}
             onRow={(record, rowIndex) => {
                 return {
-                  onClick: event => {setuserInfor(searching==0?users[rowIndex]:userView[rowIndex])}, // click row
+                  onClick: event => {setuserInfor(searching===0?users[rowIndex]:userView[rowIndex])}, // click row
                 };
               }}
             />

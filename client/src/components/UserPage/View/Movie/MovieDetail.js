@@ -8,7 +8,7 @@ import LikeDislikes from './Sections/LikeDislikes';
 import {
     PlayCircleOutlined,
   } from '@ant-design/icons';
-import { Button,Input,Rate} from 'antd'
+import { Button,Rate} from 'antd'
 
 function MovieDetail(props) {
 
@@ -17,7 +17,6 @@ function MovieDetail(props) {
     const [movie, setmovie] = useState([])
     const [CommentLists, setCommentLists] = useState([])
     const user = useSelector(state => state.auth.user)
-    const [viewComment, setviewComment] = useState(false)
 
     useEffect(() => {
         fetchData();
@@ -47,12 +46,12 @@ function MovieDetail(props) {
                 <p style={{marginTop:"5%"}}><h1 style={{color:'red'}}>{movie.original_title}</h1><p/>
                 Actors : 
                 {movie.actors && movie.actors.map((item, index) => (
-                    index==0?`"${item}"`:` , "${item}"`
+                    index===0?`"${item}"`:` , "${item}"`
                                             ))}
                 <p/>
                 Directors : 
                 {movie.directors && movie.directors.map((item, index) => (
-                    index==0?`"${item}"`:` , "${item}"`
+                    index===0?`"${item}"`:` , "${item}"`
                                             ))}
                 <p/>
                 {movie.overview}<p/>

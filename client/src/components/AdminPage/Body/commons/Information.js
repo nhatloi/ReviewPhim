@@ -24,8 +24,6 @@ function Information(props) {
         release_date = !release_date?infor.release_date : release_date
         overview = !overview?infor.overview : overview
         trailer = !trailer?infor.trailer : trailer
-
-        var premiere
         if(check === true)
         {
             await axios.post('/movie/updatemovie',{id:infor._id,premiere:-1,original_title,release_date,overview,trailer},{headers:{Authorization:token}})
@@ -79,10 +77,10 @@ function Information(props) {
             
                     > 
                             <Form.Item label="background">
-                                <img src={infor.backdrop_path}style={{top:'0',left:'0',width:'80%'}}/>
+                                <img alt='' src={infor.backdrop_path}style={{top:'0',left:'0',width:'80%'}}/>
                             </Form.Item>
                             <Form.Item label="Poster">
-                                <img src={infor.poster_path} style={{top:'0',left:'0',height:'500px'}}/>
+                                <img alt='' src={infor.poster_path} style={{top:'0',left:'0',height:'500px'}}/>
                             </Form.Item>
                             <Form.Item label="Original title" name="original_title">
                                 <Input placeholder={infor.original_title}/>
@@ -115,7 +113,7 @@ function Information(props) {
             
                     >
                             <Form.Item label="Poster">
-                                <img src={infor.poster} style={{top:'0',left:'0',height:'300px'}}/>
+                                <img alt='' src={infor.poster} style={{top:'0',left:'0',height:'300px'}}/>
                             </Form.Item>
                             <Form.Item label="Description" name="description">
                                 <Input placeholder={infor.description}/>

@@ -1,8 +1,10 @@
 const axios = require('axios');
+const mongoose = require('mongoose');
 
 const cheerio = require('cheerio');
 const Review = require('../models/Review');
 const User = require('../models/user');
+const Session = require('../models/Session');
     const fs = require("fs");
 const url= "https://www.gocdienanh.com/review-phim/"
 const url2= "https://reviewchodzui.com/category/phim-viet-nam/"
@@ -160,7 +162,7 @@ const ReviewCtrl = {
     GetallReview : async (req,res) =>{
         try {
             Review.
-            find({state:true}).sort('post_date').
+            find().sort('post_date').
             populate('movie').
             exec(function (err, reviews) {
                 if (err) return handleError(err);
@@ -170,9 +172,74 @@ const ReviewCtrl = {
             return res.status(500).json({msg: error.message})
         }
     },
+
+    GetReviewRelate : async (req,res) =>{
+        try {
+            const session = await Session.aggregate([
+                {
+                    $match : { "review": new mongoose.Types.ObjectId(req.params.id)}
+                  },
+                {
+                  $group : {
+                     _id : "$WriterId",
+                  }
+                }
+            ])
+            const array = []
+            session.forEach(element => {
+                array.push(new mongoose.Types.ObjectId(element._id))
+            });
+            const reviewRelate = await Session.aggregate([
+                {
+                    $match : { "WriterId":  {$in: array}}
+                  },
+                {
+                  $group : {
+                     _id : "$review",
+                     count: { $sum: 1 },
+                  }
+                },
+                {
+                    $sort : { count: -1 }
+                  },
+               ])
+            const array2 = []
+            reviewRelate.forEach(element => {
+                if(element._id
+                    && element._id!= req.params.id
+                    ){
+                    array2.push(new mongoose.Types.ObjectId(element._id))
+                }
+            });
+            const results = await Review.aggregate([
+                {
+                    $match : { "_id":  {$in: array2}}
+                  },
+                  {
+                    $project: {
+                        description: 1,
+                    }
+                  }
+
+               ])
+
+            return res.json(results)
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
     DeleteReview : async (req,res) =>{
         try {
             await Review.findByIdAndDelete(req.params.id)
+            res.json({msg:'Delete Review successfully!'})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    ActiveReview : async (req,res) =>{
+        try {
+            await Review.findByIdAndUpdate({_id:req.params.id},{state:true})
             res.json({msg:'Delete Review successfully!'})
         } catch (error) {
             return res.status(500).json({msg: error.message})

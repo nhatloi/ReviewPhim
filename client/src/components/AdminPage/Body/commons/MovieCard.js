@@ -12,7 +12,7 @@ function MovieCard(props) {
 
     return (
         <div className='search-detail'>
-            <img style={{width:'180px'}} src={movie.poster_path} onClick={handleAdd}/>
+            <img alt='' style={{width:'180px'}} src={movie.poster_path} onClick={handleAdd}/>
             <div style={{color:'black'}}>{movie.title}</div>
             <Modal
                 height='70%'

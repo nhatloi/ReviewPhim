@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { Checkbox,Select ,message,Modal, Input,Button} from 'antd';
+import { Checkbox,Select ,message,Modal, Input} from 'antd';
 import cheerio from 'cheerio';
 import axios from 'axios'
 import {useSelector} from 'react-redux'
@@ -185,7 +185,7 @@ const handleEditorChange = (content, editor) =>{
                 >
                     <div>Description: <Input onChange={(e)=>{setdescription(e.target.value)}}></Input></div>
                     Poster: 
-                    <div style={{height:'300px',width:'400px'}}><img style={{height:'100%',width:'100%'}} src={Poster}/></div>
+                    <div style={{height:'300px',width:'400px'}}><img alt='' style={{height:'100%',width:'100%'}} src={Poster}/></div>
                     <Input type='file' id='poster' onChange={upImage}/>
                     <Editor 
                     apiKey="p716pphziwt1dlm81kbh5sylhmy8jfkrr9d6yk5vf6ckw4dj"

@@ -96,7 +96,7 @@ function Movie() {
         else setsearching(1)
         var count=[];
         Movies.forEach(element => {
-            if(element.title.toLowerCase().search(str) != -1){
+            if(element.title.toLowerCase().search(str) !== -1){
                 count.push(element);
             }
         });
@@ -113,10 +113,10 @@ function Movie() {
            <div style={{width:"300px",float:'right',display:'flex'}}>
               <Input size="large" placeholder="Search" prefix={<UserOutlined />} onChange={handleSearch}/>
             </div>
-           <Table columns={columns} scroll={{ y: 450 }} pagination={{ pageSize: Movies.length }} dataSource={searching==0?Movies:moviesView}
+           <Table columns={columns} scroll={{ y: 450 }} pagination={{ pageSize: Movies.length }} dataSource={searching===0?Movies:moviesView}
             onRow={(record, rowIndex) => {
                 return {
-                    onClick: event => {setmovieinfor(searching==0?Movies[rowIndex]:moviesView[rowIndex])}, // click row
+                    onClick: event => {setmovieinfor(searching===0?Movies[rowIndex]:moviesView[rowIndex])}, // click row
                 };
               }}
             />

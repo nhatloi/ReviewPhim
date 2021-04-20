@@ -16,7 +16,7 @@ function AddNewMovie() {
 
     //Effect
     useEffect(() => {
-        if(search== false)
+        if(search=== false)
             fetcMovies()
     },[search])
 

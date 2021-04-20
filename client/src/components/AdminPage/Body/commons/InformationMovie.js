@@ -19,7 +19,7 @@ function InformationMovie(props) {
     useEffect(() => {
         if(!custom)
             fetcMovies(data)
-    }, [data])
+    }, [data,custom])
 
     const fetcMovies = async(data) => {
         try {
@@ -45,11 +45,11 @@ function InformationMovie(props) {
 
 
     
-    const uploadButton = (
-        <div>
-          <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    );
+    // const uploadButton = (
+    //     <div>
+    //       <div style={{ marginTop: 8 }}>Upload</div>
+    //     </div>
+    // );
 
     const Loading = (
         <div>
@@ -98,7 +98,7 @@ function InformationMovie(props) {
                 trailer:e.trailer,
             }
 
-            const res = await axios.post('/movie/addmovie/',{movie:movie},
+            await axios.post('/movie/addmovie/',{movie:movie},
                 {headers:{Authorization:token}
             })
 
@@ -120,10 +120,10 @@ function InformationMovie(props) {
                headers:{'content-type':'multipart/form-data',Authorization:token}
            })
 
-           if(e.target.id=="poster"){
+           if(e.target.id==="poster"){
                 setposterImg(res.data.url)
            }
-           if(e.target.id=="banner"){
+           if(e.target.id==="banner"){
                 setbannerImg(res.data.url)
           }
 

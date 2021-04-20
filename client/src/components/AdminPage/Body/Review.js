@@ -29,12 +29,12 @@ function Review() {
      const handleEdit =() =>{
         setvisibleInfor (!visibleInfor)
     }
-     const Loading = (
-        <div>
-            <Skeleton.Image active={true} /> 
-            <Skeleton active={true}/> 
-        </div>
-    );
+    //  const Loading = (
+    //     <div>
+    //         <Skeleton.Image active={true} /> 
+    //         <Skeleton active={true}/> 
+    //     </div>
+    // );
 
     const columns = [
         {
@@ -55,6 +55,26 @@ function Review() {
           {
             title: 'post_date',
             dataIndex: 'post_date',
+          },    
+          {
+            title: 'State',
+            dataIndex: 'state',
+            filters: [
+                {
+                  text: 'Active',
+                  value: true,
+                },
+                {
+                    text: 'Waiting',
+                    value: false,
+                  },
+              ],
+            render:result => (
+                <>
+                  {result===true?'Active':'Waiting'}
+                </> 
+              ),
+                onFilter: (value, record) => record.state===value,
           },
           {
             title: 'keywords',
@@ -74,10 +94,15 @@ function Review() {
             title: "Action",
             dataIndex: "",
             key: "x",
-            render: () =>
+            render: (result) =>
                 <div>
                      <Button icon={<DeleteOutlined/>} onClick={Deletehandle}>Delete</Button>
                      <Button icon={<FolderViewOutlined />} onClick={handleEdit}>View</Button>
+                     {result.state===false?<Button
+                     onClick={async()=>{
+                         await axios.post(`/review/active/${result._id}`);
+                         Reviews_eff()
+                    }}>Active</Button>:null}
                 </div>
           },
       ];
@@ -115,16 +140,16 @@ function Review() {
         var count=[];
         results.forEach(element => {
             if(element.movie)
-                if(element.movie.title.toLowerCase().search(str) != -1
-                ||element.description.toLowerCase().search(str) != -1
-                ||element.keywords.join(' ').toLowerCase().search(str) != -1
+                if(element.movie.title.toLowerCase().search(str) !== -1
+                ||element.description.toLowerCase().search(str) !== -1
+                ||element.keywords.join(' ').toLowerCase().search(str) !== -1
               
             ){
                 count.push(element);
             }
             if(!element.movie)
-                if(element.description.toLowerCase().search(str) != -1
-                ||element.keywords.join(' ').toLowerCase().search(str) != -1
+                if(element.description.toLowerCase().search(str) !== -1
+                ||element.keywords.join(' ').toLowerCase().search(str) !== -1
             ){
                 count.push(element);
             }
@@ -162,7 +187,7 @@ function Review() {
     const ColumnsList = [
         {
             dataIndex: 'img',
-            render: result =><img src={result} style={{width:'400px'}}/> 
+            render: result =><img alt='' src={result} style={{width:'400px'}}/> 
           },
         {
           dataIndex: 'description',
@@ -187,10 +212,10 @@ function Review() {
             <div className='body-container'>
                 <h2><Text underline>Review Manager</Text></h2>
                     <Input style={{width:"30%",float:'right'}} size="large" placeholder="Search" prefix={<UserOutlined />} onChange={handleSearch}/>
-                <Table bordered={true} columns={columns} scroll={{ y: 450 }} pagination={{ pageSize: results.length }} dataSource={searching==0?results:view}
+                <Table bordered={true} columns={columns} scroll={{ y: 450 }} pagination={{ pageSize: results.length }} dataSource={searching===0?results:view}
                     onRow={(record, rowIndex) => {
                         return {
-                            onClick: event => {setviewinfor(searching==0?results[rowIndex]:view[rowIndex])}, // click row
+                            onClick: event => {setviewinfor(searching===0?results[rowIndex]:view[rowIndex])}, // click row
                             onContextMenu: event => {}, // right button click row
                         };
                     }}
