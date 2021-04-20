@@ -3,6 +3,9 @@ const cheerio = require('cheerio');
 const fs = require("fs");
 const Scraper = require('images-scraper');
 const Movie = require('../models/Movie');
+const Session = require('../models/Session');
+const mongoose = require('mongoose');
+
 
 const {THEMOVIEDBURL,THEMOVIEDBKEY,BACKDROP_SIZE,IMAGE_SIZE,IMAGE_BASE_URL,LANGUAGE,POSTER_SIZE} = process.env
 
@@ -172,6 +175,37 @@ const moviesCtrl = {
         try {
             const movie = await Movie.findById(req.params.id)
             return res.json(movie)
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    GetMovieRelate : async (req,res) =>{
+        try {
+
+            const session = await Session.aggregate([
+                {
+                    $match : { "movie":  {$in: [new mongoose.Types.ObjectId(req.params.id)]}}
+                  },
+                // {
+                //   $group : {
+                //      _id : "$WriterId",
+                //   }
+                // }
+               ])
+
+            // const movieRelate = await Session.aggregate([
+            //     {
+            //         $match : { "movie":  new mongoose.Types.ObjectId(req.params.id)}
+            //       },
+            //     {
+            //       $group : {
+            //          _id : "$WriterId",
+            //       }
+            //     }
+            //    ])
+            
+            return res.json(session)
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

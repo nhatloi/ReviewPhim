@@ -1,4 +1,5 @@
 const Users = require('../models/user')
+const Session = require('../models/Session')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const sendEmail = require('./sendMail')
@@ -183,6 +184,62 @@ const userCtrl = {
         try{
         await Users.findByIdAndDelete(req.params.id)
         res.json({msg:'delete success!'})
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+
+    GetSessionUser :async (req,res) =>{
+        try{
+            const id = req.header("_id")
+            const session = await Session.find({WriterId:id}).sort('updatedAt')
+            .populate('movie','title')
+            .populate('review','description')
+            .populate('news','description')
+            res.json(session)
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+
+    PostSession :async (req,res) =>{
+        try{
+            const {WriterId,movie,review,news} = req.body
+            if(movie){
+                const check = await Session.findOne({WriterId:WriterId,movie:movie})
+                if(!check){
+                    const newSession = new Session({
+                        WriterId:WriterId,movie:movie
+                    })
+                    await newSession.save();
+                    return  res.json({msg:"save session"});
+                }
+                return  res.json({msg:"save session"});
+            }
+
+            if(review){
+                const check= await Session.findOne({WriterId:WriterId,review:review})
+                if(!check){
+                    const newSession = new Session({
+                        WriterId:WriterId,review:review
+                    })
+                    await newSession.save();
+                    return  res.json({msg:"save session"});
+                }
+                return  res.json({msg:"save session"});
+            }
+            if(news){
+                const check= await Session.findOne({WriterId:WriterId,news:news})
+                if(!check){
+                    const newSession = new Session({
+                        WriterId:WriterId,news:news
+                    })
+                    await newSession.save();
+                    return  res.json({msg:"save session"});
+                }
+                return  res.json({msg:"save session"});
+            }
+
         }catch(err){
             return res.status(500).json({msg: err.message})
         }
