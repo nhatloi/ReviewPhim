@@ -13,23 +13,32 @@ const initialState ={
     name : '',
     email: '',
     password : '',
-    cf_password:''
+    cf_password:'',
+    _id:''
 }
 
 function Profile() {
     //const 
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(true);
-    const auth = useSelector(state => state.auth)
+    const user = useSelector(state => state.auth.user)
     const token = useSelector(state => state.token)
-    const {user} = auth
     const [inforUser, setinforUser] = useState(initialState)
+    const [session, setsession] = useState([])
   
     const layout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
     };
     
+
+    useEffect(() => {
+        setinforUser({...user})
+        fetchSession()
+     },[user])
+
+     
+
     const changeAvatar = async (e) =>{
         e.preventDefault();
         try {
@@ -82,9 +91,16 @@ function Profile() {
         getToken()
     }
 
-    useEffect(() => {
-       setinforUser({...user})
-    },[user])
+    const fetchSession = async () =>{
+        try {
+            if(user._id){
+                const res = await axios.get('/user/getsession/',{headers:{_id:user._id}})
+                return setsession(res.data);
+            }
+        } catch (err) {
+           return err.response.data.msg
+        }
+    }
 
 
     return (
@@ -175,8 +191,30 @@ function Profile() {
                         <Card style={{ width: 800,height:'100%'}}>
                             <h2>Recent activity</h2>
                             <Divider/>
-                            <p>Card content</p>
-                            <p>Card content</p>
+                            {session && session.map((val, index) => (
+                                <div>
+                                    {val.movie?
+                                    <a href={`movie/${val.movie._id}`}>
+                                        {'Movie: ' + val.movie.title}
+                                    </a>
+                                    :null}
+
+                                    {val.review?
+                                     <a href={`review/${val.review._id}`}>
+                                        {'Review: ' + val.review.description}
+                                    </a>
+                                    :null}
+
+                                    {val.news?  
+                                     <a href={val.news.link} target='_blank'>
+                                        {'News: ' + val.news.description}
+                                    </a>
+                                    :null}
+                                    <p/>
+                                    {new Date(val.updatedAt).toLocaleString()}
+                                    <hr/>
+                                </div>
+                            ))}
                         </Card>
                     </div>
              </Row>  

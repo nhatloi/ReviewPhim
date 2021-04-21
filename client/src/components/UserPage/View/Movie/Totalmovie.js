@@ -1,6 +1,7 @@
 import React,{useState,useEffect}from 'react'
 import {Row,Col} from 'antd';
 import axios from 'axios'
+import './Cardmovie.css'
 
 
 function Totalmovie() {
@@ -23,19 +24,22 @@ function Totalmovie() {
 
 
     return (
+        
         <div className='container'>
             <div className='list-movies'>
                 <Row gutter={[8, 8]}>
                         {results && results.map((movie, index) => (
                             <React.Fragment key={index}>
                                <Col span={6} >
-                                   <div className='card-movie'>
-                                       <label>{movie.episode}</label>
+                                
+                                   <div className='card-movie bg-white shadow-lg'>
                                         <a href={`/movie/${movie._id}`}>
-                                            <img alt ='poster' src={movie.poster_path}/>
+                                        <div className='imgbox'>   <img alt ='poster' src={movie.poster_path}/></div>
+
+                                         
                                             <div className='movie-infor'>
                                                 {movie.title}<p/>
-                                                Khởi chiếu: {movie.date}
+                                                Khởi chiếu: {new Date(movie.release_date).toDateString()}
                                                 </div>
                                         </a>
                                    </div>

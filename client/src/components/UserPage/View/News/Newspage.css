@@ -1,8 +1,20 @@
 
 .news_page {
-    padding: 20px;
-    background: white;
-    height: 100vh;
+    padding: 60px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 50px;
+}
+.news_page h2{
+    color: black;
+    font-size: 50px;
+    text-align: center;
+}
+
+.list_news{
+    background: black;
+    padding: 10px;
+    margin-top: 40px;
 }
 
 .cast_news {
@@ -15,7 +27,8 @@
 }
 .cast_news img{
     border-radius: 4px;
-    width: 300px;
+    height: 100%;
+    right: 0;
 }
 
 .cast_news h1{

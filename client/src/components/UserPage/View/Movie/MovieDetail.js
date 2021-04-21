@@ -17,12 +17,43 @@ function MovieDetail(props) {
     const [movie, setmovie] = useState([])
     const [CommentLists, setCommentLists] = useState([])
     const user = useSelector(state => state.auth.user)
+    const token = useSelector(state => state.token)
+    const [movieRelate, setmovieRelate] = useState([])
 
     useEffect(() => {
         fetchData();
+        postSession();
+    },[user])
+
+    useEffect(() => {
+        getMovieRelate();
     },[])
 
-    
+
+
+    const postSession = async () =>{
+        try {
+            if(user){
+                const res = await axios.post(`/user/postsession/`,{WriterId:user._id,movie:id},{headers:{Authorization:token}})
+            }
+        } catch (err) {
+           return;
+        }
+    }
+
+    const getMovieRelate = async () =>{
+        try {
+            if(user){
+                const res = await axios.get(`/movie/getmovierelate/${id}`)
+                setmovieRelate(res.data)
+                console.log(res.data)
+            }
+        } catch (err) {
+           return;
+        }
+    }
+
+
     const fetchData = async () =>{
         try {
             const res = await axios.get(`/movie/getmoviebyid/${id}`)
@@ -40,7 +71,7 @@ function MovieDetail(props) {
         }
     }
     return (
-        <div>
+        <div style={{marginBottom:'100px'}}>
             <div className="movie-detail">
             <div class="text">
                 <p style={{marginTop:"5%"}}><h1 style={{color:'red'}}>{movie.original_title}</h1><p/>
@@ -78,7 +109,16 @@ function MovieDetail(props) {
                     />
                  </div>
                 <div className='People_view'>
-                    People also view
+                    <h2>   People also view</h2>
+                 
+                    {movieRelate && movieRelate.map((val, index) => (
+                                <div className='movie-relate'>
+                                    <a href={`${val._id}`}>
+                                        <img alt='' src={val.poster_path}/>
+                                       {val.title}
+                                    </a>
+                                </div>
+                            ))}
                 </div>
             </div>
                     <div id='comment' className="detail-comment">

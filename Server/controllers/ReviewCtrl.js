@@ -218,6 +218,9 @@ const ReviewCtrl = {
                   {
                     $project: {
                         description: 1,
+                        poster:1,
+                        keywords:1,
+                        post_date:1,
                     }
                   }
 
@@ -240,7 +243,7 @@ const ReviewCtrl = {
     ActiveReview : async (req,res) =>{
         try {
             await Review.findByIdAndUpdate({_id:req.params.id},{state:true})
-            res.json({msg:'Delete Review successfully!'})
+            res.json({msg:'Active Review successfully!'})
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

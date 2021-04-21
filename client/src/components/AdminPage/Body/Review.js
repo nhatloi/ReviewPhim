@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import {Typography,Table,Modal,message,Input,Button,Pagination, Skeleton,Tag,Drawer } from 'antd';
+import {Typography,Table,Modal,message,Input,Button,Pagination,Tag,Drawer } from 'antd';
 import {useSelector} from 'react-redux'
 import { DeleteOutlined,UserOutlined,FolderViewOutlined} from '@ant-design/icons';
 import axios from 'axios'

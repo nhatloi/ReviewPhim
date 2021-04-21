@@ -224,6 +224,7 @@ const moviesCtrl = {
                   {
                     $project: {
                         title: 1,
+                        poster_path:1,
                     }
                   },
                   {$limit: 5}

@@ -29,7 +29,7 @@ router.post('/google_login', userCtrl.googleLogin)
 
 router.post('/facebook_login', userCtrl.facebookLogin)
 
-router.get('/getsession',auth,userCtrl.GetSessionUser)
+router.get('/getsession/',userCtrl.GetSessionUser)
 
 router.post('/postsession',auth,userCtrl.PostSession)
 

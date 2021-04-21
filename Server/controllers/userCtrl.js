@@ -192,10 +192,11 @@ const userCtrl = {
     GetSessionUser :async (req,res) =>{
         try{
             const id = req.header("_id")
-            const session = await Session.find({WriterId:id}).sort('updatedAt')
+            const session = await Session.find({WriterId:id}).sort({'updatedAt': -1})
             .populate('movie','title')
             .populate('review','description')
-            .populate('news','description')
+            .populate('news','description link')
+            .limit(10)
             res.json(session)
         }catch(err){
             return res.status(500).json({msg: err.message})
@@ -212,9 +213,9 @@ const userCtrl = {
                         WriterId:WriterId,movie:movie
                     })
                     await newSession.save();
-                    return  res.json({msg:"save session"});
+                    return  res.json({msg:"visit session"});
                 }
-                return  res.json({msg:"save session"});
+                return  res.json({msg:"record vistit session"});
             }
 
             if(review){
