@@ -8,6 +8,7 @@ const {google} = require('googleapis')
 const {OAuth2} = google.auth
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 const fetch = require('node-fetch')
+const { findOneAndUpdate } = require('../models/user')
 
 const CLIENT_URL = process.env.CLIENT_URL
 const saltOrRounds = 10
@@ -215,6 +216,7 @@ const userCtrl = {
                     await newSession.save();
                     return  res.json({msg:"visit session"});
                 }
+                await Session.findOneAndUpdate({WriterId:WriterId,movie:movie},{movie:movie})
                 return  res.json({msg:"record vistit session"});
             }
 
@@ -227,6 +229,7 @@ const userCtrl = {
                     await newSession.save();
                     return  res.json({msg:"save session"});
                 }
+                await Session.findOneAndUpdate({WriterId:WriterId,review:review},{review:review})
                 return  res.json({msg:"save session"});
             }
             if(news){
@@ -238,6 +241,7 @@ const userCtrl = {
                     await newSession.save();
                     return  res.json({msg:"save session"});
                 }
+                await Session.findOneAndUpdate({WriterId:WriterId,news:news},{news:news})
                 return  res.json({msg:"save session"});
             }
 

@@ -115,7 +115,7 @@ function News() {
 
     const Get_News_eff = async() =>{
         try{
-            const res = await axios.get('/news/getnews')
+            const res = await axios.get('/news/getnews',{headers:{url:'topics/CAAqIQgKIhtDQkFTRGdvSUwyMHZNREoyZUc0U0FuWnBLQUFQAQ?'}})
             setlistNews(res.data.news)
         }catch (error) {
             message.error(error.response.data.msg)

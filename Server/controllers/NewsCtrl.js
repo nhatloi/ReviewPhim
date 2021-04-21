@@ -28,7 +28,9 @@ const NewCtrl = {
     
     GetNews : async (req,res) =>{
        try{
-            const content = await fetchData(url)
+            const url = req.header("url")
+            const content = await fetchData(`https://news.google.com/${url}hl=vi&gl=VN&ceid=VN%3Avi`)
+            console.log(`https://news.google.com/${url}hl=vi&gl=VN&ceid=VN%3Avi`);
             const $ =cheerio.load(content)
             const news=[]
             var totalnews=0

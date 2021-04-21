@@ -8,7 +8,8 @@ import LikeDislikes from './Sections/LikeDislikes';
 import {
     PlayCircleOutlined,
   } from '@ant-design/icons';
-import { Button,Rate} from 'antd'
+import { Button,Rate,Tabs } from 'antd'
+const { TabPane } = Tabs;
 
 function MovieDetail(props) {
 
@@ -19,22 +20,27 @@ function MovieDetail(props) {
     const user = useSelector(state => state.auth.user)
     const token = useSelector(state => state.token)
     const [movieRelate, setmovieRelate] = useState([])
+    const [newsRelate, setnewsRelate] = useState([])
 
     useEffect(() => {
         fetchData();
+    },[])
+
+    useEffect(() => {
         postSession();
     },[user])
 
     useEffect(() => {
         getMovieRelate();
-    },[])
+        getNewslate();
+    },[movie])
 
 
 
     const postSession = async () =>{
         try {
-            if(user){
-                const res = await axios.post(`/user/postsession/`,{WriterId:user._id,movie:id},{headers:{Authorization:token}})
+            if(token){
+                await axios.post(`/user/postsession/`,{WriterId:user._id,movie:id},{headers:{Authorization:token}})
             }
         } catch (err) {
            return;
@@ -43,12 +49,22 @@ function MovieDetail(props) {
 
     const getMovieRelate = async () =>{
         try {
-            if(user){
+            if(movie){
                 const res = await axios.get(`/movie/getmovierelate/${id}`)
                 setmovieRelate(res.data)
-                console.log(res.data)
             }
         } catch (err) {
+           return;
+        }
+    }
+
+    const getNewslate = async () =>{
+        try {
+            if(movie){
+                const res = await axios.get(`/news/getnews`,{headers:{url:`search?q=(phim) ${movie.title}&`}})
+                setnewsRelate(res.data)
+            }
+        } catch (err) { 
            return;
         }
     }
@@ -72,58 +88,69 @@ function MovieDetail(props) {
     }
     return (
         <div style={{marginBottom:'100px'}}>
-            <div className="movie-detail">
-            <div class="text">
-                <p style={{marginTop:"5%"}}><h1 style={{color:'red'}}>{movie.original_title}</h1><p/>
-                Actors : 
-                {movie.actors && movie.actors.map((item, index) => (
-                    index===0?`"${item}"`:` , "${item}"`
-                                            ))}
-                <p/>
-                Directors : 
-                {movie.directors && movie.directors.map((item, index) => (
-                    index===0?`"${item}"`:` , "${item}"`
-                                            ))}
-                <p/>
-                {movie.overview}<p/>
-                <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
-                <div className='likedislike'>
-                    <LikeDislikes video videoId={id} userId={user._id} /> <a href="#trailer"><PlayCircleOutlined/>Trailer</a>
-                    <a href='#comment'> Comment<p/></a>
+            <Tabs defaultActiveKey="movie">
+                <TabPane tab="Movie" key="movie">
+                    <div className="movie-detail">
+                <div class="text">
+                    <p style={{marginTop:"5%"}}><h1 style={{color:'red'}}>{movie.original_title}</h1><p/>
+                    Actors : 
+                    {movie.actors && movie.actors.map((item, index) => (
+                        index===0?`"${item}"`:` , "${item}"`
+                                                ))}
+                    <p/>
+                    Directors : 
+                    {movie.directors && movie.directors.map((item, index) => (
+                        index===0?`"${item}"`:` , "${item}"`
+                                                ))}
+                    <p/>
+                    {movie.overview}<p/>
+                    <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
+                    <div className='likedislike'>
+                        <LikeDislikes video videoId={id} userId={user._id} /> <a href="#trailer"><PlayCircleOutlined/>Trailer</a>
+                        <a href='#comment'> Comment<p/></a>
+                    </div>
+                    </p>
+                    <img style={{height:"500px",width:"300px",opacity:'1',float:'right'}} src={movie.poster_path}/>
                 </div>
-                </p>
-                <img style={{height:"500px",width:"300px",opacity:'1',float:'right'}} src={movie.poster_path}/>
-            </div>
-                <img src={movie.backdrop_path}/>
-               
-             <div className='poster'>
-            </div>
-            </div>
-             <div id='trailer' className="detail-trailer">
-                 <div style={{width:'70%'}}>
-                    <ReactPlayer url={movie.trailer}
-                    height='100%'
-                    width='100%' 
-                    playIcon
-                    controls={true}  
-                    />
-                 </div>
-                <div className='People_view'>
-                    <h2>   People also view</h2>
-                 
-                    {movieRelate && movieRelate.map((val, index) => (
-                                <div className='movie-relate'>
-                                    <a href={`${val._id}`}>
-                                        <img alt='' src={val.poster_path}/>
-                                       {val.title}
-                                    </a>
-                                </div>
-                            ))}
+                    <img src={movie.backdrop_path}/>
+                
+                <div className='poster'>
                 </div>
-            </div>
-                    <div id='comment' className="detail-comment">
-                    <Comments CommentLists={CommentLists} postId={movie._id} refreshFunction={fetchData} />
                 </div>
+                <div id='trailer' className="detail-trailer">
+                    <div style={{width:'70%'}}>
+                        <ReactPlayer url={movie.trailer}
+                        height='100%'
+                        width='100%' 
+                        playIcon
+                        controls={true}  
+                        />
+                    </div>
+                    <div className='People_view'>
+                        <h2>   People also view</h2>
+                    
+                        {movieRelate && movieRelate.map((val, index) => (
+                                    <div className='movie-relate'>
+                                        <a href={`${val._id}`}>
+                                            <img alt='' src={val.poster_path}/>
+                                        {val.title}
+                                        </a>
+                                    </div>
+                                ))}
+                    </div>
+                </div>
+                        <div id='comment' className="detail-comment">
+                        <Comments CommentLists={CommentLists} postId={movie._id} refreshFunction={fetchData} />
+                    </div>
+                </TabPane>
+                <TabPane tab="News relate" key="news_relate">
+                Tab 2
+                </TabPane>
+                <TabPane tab="Review" key="review">
+                Tab 3
+                </TabPane>
+            </Tabs>
+            
         </div>
     )
 }
