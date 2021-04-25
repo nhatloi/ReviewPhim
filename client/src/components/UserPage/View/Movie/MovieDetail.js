@@ -30,11 +30,6 @@ function MovieDetail(props) {
         postSession();
     },[user])
 
-    useEffect(() => {
-        getMovieRelate();
-        getNewslate();
-    },[movie])
-
 
 
     const postSession = async () =>{
@@ -47,10 +42,10 @@ function MovieDetail(props) {
         }
     }
 
-    const getMovieRelate = async () =>{
+    const getMovieRelate = async (_id) =>{
         try {
             if(movie){
-                const res = await axios.get(`/movie/getmovierelate/${id}`)
+                const res = await axios.get(`/movie/getmovierelate/${_id}`)
                 setmovieRelate(res.data)
             }
         } catch (err) {
@@ -58,14 +53,14 @@ function MovieDetail(props) {
         }
     }
 
-    const getNewslate = async () =>{
+    const getNewslate = async (key) =>{
         try {
             if(movie){
-                const res = await axios.get(`/news/getnews`,{headers:{url:`search?q=(phim) ${movie.title}&`}})
-                setnewsRelate(res.data)
+                const res = await axios.get(`/news/getnews`,{headers:{key:key}})
+                setnewsRelate(res.data.news)
             }
         } catch (err) { 
-           return;
+           return console.log(err);
         }
     }
 
@@ -74,6 +69,8 @@ function MovieDetail(props) {
         try {
             const res = await axios.get(`/movie/getmoviebyid/${id}`)
             setmovie(res.data)
+            getNewslate(res.data._id)
+            getMovieRelate(res.data._id)
             axios.post('/comment/getComments', { movieId: res.data._id})
             .then(response => {
                 if (response.data.success) {
@@ -144,7 +141,21 @@ function MovieDetail(props) {
                     </div>
                 </TabPane>
                 <TabPane tab="News relate" key="news_relate">
-                Tab 2
+                <div className="news_page">
+                    <h2>News</h2>
+                    {newsRelate && newsRelate.map((news, index) => (
+                    <div className='cast_news'>
+                            <img alt='' src={news.img }/>
+                        <a alt="source" href={news.link}  target="_blank" >
+                        <div style={{marginLeft:'30px'}}>
+                                <h1>{news.description}</h1>
+                                <label>{news.source} - {news.time}</label>
+                        </div>
+                        </a>
+                    </div>
+                ))}
+                
+                </div>
                 </TabPane>
                 <TabPane tab="Review" key="review">
                 Tab 3

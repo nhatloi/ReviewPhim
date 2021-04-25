@@ -173,6 +173,35 @@ const ReviewCtrl = {
         }
     },
 
+    GetDetailReview : async (req,res) =>{
+        const id = req.params.id
+        try {
+            Review.
+            findById(id)
+            .populate('movie').
+            exec(function (err, reviews) {
+                if (err) return handleError(err);
+                return res.json({review:reviews})
+            });
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    GetlistReview : async (req,res) =>{
+        try {
+            Review.
+            find({state:true}).sort('post_date').
+            populate('movie').
+            exec(function (err, reviews) {
+                if (err) return handleError(err);
+                return res.json({review:reviews})
+            });
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
     GetReviewRelate : async (req,res) =>{
         try {
             const session = await Session.aggregate([

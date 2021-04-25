@@ -115,7 +115,7 @@ function Review() {
 
     const Reviews_eff = async() =>{
         try{
-            const res = await axios.get('/review/getallreviews')
+            const res = await axios.get('/review/getallreviews',{headers:{Authorization:token}})
             setresults(res.data.review)
         }catch (error) {
             message.error(error.response.data.msg)

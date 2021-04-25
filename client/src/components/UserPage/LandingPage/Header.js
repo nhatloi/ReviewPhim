@@ -91,7 +91,7 @@ function NavHeader() {
               <NavLink href="/news">News</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/movies">Reviews</NavLink>
+              <NavLink href="/review">Reviews</NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
             </UncontrolledDropdown>

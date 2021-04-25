@@ -11,6 +11,8 @@ import Notfound from '../../utils/Notfound'
 import Profile from '../View/Profile'
 import Successfully from '../../utils/Successfully'
 import News from '../View/News/NewsPage'
+import Review from '../View/Review/Review'
+import ReviewDetail from '../View/Review/ReviewDetail'
 import Home from '../View/Home'
 import Header from './Header'
 // import Footer from './Footer'
@@ -49,6 +51,8 @@ function Body() {
                         <Route exact path="/user/activation/:activation_token" component={ActiveEmail}/>
                         {/* News */}
                         <Route exact path="/news" component={News}/>
+                        <Route exact path="/review" component={Review}/>
+                        <Route exact path="/review/:id" component={ReviewDetail}/>
                         {/* Movie */}
                         <Route exact path="/movie/:id" component={MovieDetail}/>
                         <Route exact path="/movietest" component={Detail}/>

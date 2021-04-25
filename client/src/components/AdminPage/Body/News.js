@@ -29,7 +29,7 @@ function News() {
         {
           dataIndex: '',
           width:"75%",
-          render: result =><div><a style={{color:'black'}} href={result.link} target="_blank">{result.description}</a>
+          render: result =><div><a style={{color:'black'}} href={result.link} target="_blank">{result.title}</a>
           
             <div style={{color:'gray'}}>{result.source} - {result.time} </div>
           </div>
@@ -50,6 +50,11 @@ function News() {
 
     const columns = [
         {
+            title: 'title',
+            dataIndex: 'title',
+            width:"20%",
+          },
+        {
           title: 'description',
           dataIndex: 'description',
           width:"25%",
@@ -67,17 +72,13 @@ function News() {
                 title: 'time',
                 dataIndex: 'time',
                 key:"time",
+                render: result =><div>{new Date(result).toDateString()}</div>
               },
               {
                 title: 'Writer',
                 dataIndex: 'WriterId',
                 key:'total_seats',
                render: result =><div>{result.name}</div>
-              },
-              {
-                title: 'Original link',
-                dataIndex: 'link',
-                key:'Original_link',
               },
             ],
           },
@@ -115,7 +116,7 @@ function News() {
 
     const Get_News_eff = async() =>{
         try{
-            const res = await axios.get('/news/getnews',{headers:{url:'topics/CAAqIQgKIhtDQkFTRGdvSUwyMHZNREoyZUc0U0FuWnBLQUFQAQ?'}})
+            const res = await axios.get('/news/getnews',{headers:{key:'topics'}})
             setlistNews(res.data.news)
         }catch (error) {
             message.error(error.response.data.msg)
@@ -125,11 +126,10 @@ function News() {
     const Addnew = async () =>{
         
         try {
-            const res = await axios.post(`/news/addnews`,{WriterId:writer,description:newsclick.description,link:newsclick.link,source:newsclick.source,time:newsclick.time,img:newsclick.img   },
+            const res = await axios.post(`/news/addnews`,{WriterId:writer,description:newsclick.description,title:newsclick.title,link:newsclick.link,source:newsclick.source,time:newsclick.time,img:newsclick.img},
             {headers:{Authorization:token}
             })
             message.success(res.data.msg)
-            localStorage.setItem('updatePage',true)
             News_eff();
         } catch (error) {
             message.warning('add fail!')
@@ -145,7 +145,7 @@ function News() {
         var count=[];
         results.forEach(element => {
             if(element.WriterId.name.toLowerCase().search(str) !== -1
-            ||element.description.toLowerCase().search(str) !== -1
+            ||element.title.toLowerCase().search(str) !== -1
             ||element.source.toLowerCase().search(str) !== -1
             ){
                 count.push(element);
