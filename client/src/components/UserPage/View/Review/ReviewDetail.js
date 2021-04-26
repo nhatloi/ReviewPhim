@@ -3,10 +3,6 @@ import axios from 'axios'
 import './Review.css'
 
 
-
-
-
-
 function ReviewDetail(props) {
 
     const id = props.match.params.id
