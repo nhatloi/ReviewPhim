@@ -5,6 +5,7 @@ const Scraper = require('images-scraper');
 const Movie = require('../models/Movie');
 const Session = require('../models/Session');
 const mongoose = require('mongoose');
+const Review = require('../models/Review')
 
 
 const {THEMOVIEDBURL,THEMOVIEDBKEY,BACKDROP_SIZE,IMAGE_SIZE,IMAGE_BASE_URL,LANGUAGE,POSTER_SIZE} = process.env
@@ -175,6 +176,15 @@ const moviesCtrl = {
         try {
             const movie = await Movie.findById(req.params.id)
             return res.json(movie)
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    GetReviewById : async (req,res) =>{
+        try {
+            const reviews = await Review.find({movie:req.params.id})
+            return res.json({reviews:reviews})
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

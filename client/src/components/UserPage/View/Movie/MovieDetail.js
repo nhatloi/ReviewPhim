@@ -1,6 +1,7 @@
 import React, {useState,useEffect}from 'react'
 import ReactPlayer from 'react-player/youtube'
 import axios from 'axios'
+import {Row} from 'antd'
 import {useSelector} from 'react-redux'
 import './MovieDetail.css'
 import Comments from './Sections/Comments'
@@ -21,6 +22,7 @@ function MovieDetail(props) {
     const token = useSelector(state => state.token)
     const [movieRelate, setmovieRelate] = useState([])
     const [newsRelate, setnewsRelate] = useState([])
+    const [reviews, setreviews] = useState([])
 
     useEffect(() => {
         fetchData();
@@ -64,13 +66,27 @@ function MovieDetail(props) {
         }
     }
 
+    const getReviewrelate = async (key) =>{
+        try {
+            if(movie){
+                const res = await axios.get(`/movie/getreviewbymovie/${id}`)
+                setreviews(res.data.reviews)
+                console.log(res.data.reviews)
+            }
+        } catch (err) { 
+           return console.log(err);
+        }
+    }
+
 
     const fetchData = async () =>{
         try {
             const res = await axios.get(`/movie/getmoviebyid/${id}`)
             setmovie(res.data)
-            getNewslate(res.data._id)
-            getMovieRelate(res.data._id)
+            getNewslate(id)
+            getMovieRelate(id)
+            getReviewrelate()
+            
             axios.post('/comment/getComments', { movieId: res.data._id})
             .then(response => {
                 if (response.data.success) {
@@ -158,7 +174,25 @@ function MovieDetail(props) {
                 </div>
                 </TabPane>
                 <TabPane tab="Review" key="review">
-                Tab 3
+                    <div className='review-page bg-white shadow-lg'>
+                        <Row gutter={[8, 8]}>
+                            {reviews && reviews.map((review, index) => (                        
+                                    <div className='card-review bg-white shadow-lg'>
+                                        <div class="flip-box-inner">
+                                            <a href={`/review/${review._id}`}>
+                                                <div className='img-box'>
+                                                    <img alt ='poster' src={review.poster}/>
+                                                </div>
+                                                    <div className='infor'>
+                                                        {review.description}<p/>
+                                                    </div>                                            
+                                                </a>
+                                        </div>
+                                        
+                                    </div>
+                            ))}
+                        </Row>
+                    </div>
                 </TabPane>
             </Tabs>
             

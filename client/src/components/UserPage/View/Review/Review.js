@@ -25,8 +25,8 @@ function Review() {
     return (
         <div style={{margin:'100px'}}>
              <Button onClick={()=>{setcustomvisible(!customvisible)}}>Post Review</Button>
+             <AddNewReview custom visible={customvisible} handle ={setcustomvisible}/>
             <div className='review-page bg-white shadow-lg'>
-                <AddNewReview custom visible={customvisible} handle ={setcustomvisible}/>
                 <Row gutter={[8, 8]}>
                     {results && results.map((review, index) => (                        
                             <div className='card-review bg-white shadow-lg'>
