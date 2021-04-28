@@ -6,6 +6,8 @@ const Movie = require('../models/Movie');
 const Session = require('../models/Session');
 const mongoose = require('mongoose');
 const Review = require('../models/Review')
+const Rate = require('../models/Rate');
+const { findOneAndUpdate, findOneAndReplace } = require('../models/Rate');
 
 
 const {THEMOVIEDBURL,THEMOVIEDBKEY,BACKDROP_SIZE,IMAGE_SIZE,IMAGE_BASE_URL,LANGUAGE,POSTER_SIZE} = process.env
@@ -185,6 +187,45 @@ const moviesCtrl = {
         try {
             const reviews = await Review.find({movie:req.params.id})
             return res.json({reviews:reviews})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    
+    PostRate : async (req,res) =>{
+        try {
+            const {rate,Movie_id,content,WriterId} = req.body;
+            const newrate = new Rate({rate:rate,movie:Movie_id,content:content,WriterId:WriterId})
+           const check_rate = await Rate.findOne({movie:Movie_id,WriterId:WriterId})
+            if(check_rate)
+                {
+                    await Rate.findByIdAndUpdate(check_rate._id,{rate:rate,content:content});
+                    return res.json({msg:"Rate update success!"})
+                }
+            else {
+                await newrate.save();
+                return res.json({msg:"Rate success!"})
+            }
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+    GetRate : async (req,res) =>{
+        try {
+            const rates = await Rate.find({movie:mongoose.Types.ObjectId(req.params.id)})
+            if(!rates.length)
+                {
+                    return res.json({rate:0})
+                }
+            else {
+                var sum = 0
+                rates.map(rate =>{
+                    sum +=parseInt( rate.rate);
+                });
+                sum /= rates.length;
+                return res.json({rate:sum})
+            }
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

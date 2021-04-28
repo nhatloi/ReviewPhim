@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux'
 import './MovieDetail.css'
 import Comments from './Sections/Comments'
 import LikeDislikes from './Sections/LikeDislikes';
+import AddRate from './Sections/AddRate' 
 import {
     PlayCircleOutlined,
   } from '@ant-design/icons';
@@ -23,15 +24,24 @@ function MovieDetail(props) {
     const [movieRelate, setmovieRelate] = useState([])
     const [newsRelate, setnewsRelate] = useState([])
     const [reviews, setreviews] = useState([])
+    const [rate, setrate] = useState(0)
+    const [modalvis, setmodalvis] = useState(false)
 
     useEffect(() => {
         fetchData();
-    },[])
+    },[modalvis])
 
     useEffect(() => {
         postSession();
     },[user])
 
+    const setvis = () =>{
+        try {
+            setmodalvis(!modalvis)
+        } catch (err) {
+           return;
+        }
+    }
 
 
     const postSession = async () =>{
@@ -71,7 +81,18 @@ function MovieDetail(props) {
             if(movie){
                 const res = await axios.get(`/movie/getreviewbymovie/${id}`)
                 setreviews(res.data.reviews)
-                console.log(res.data.reviews)
+            }
+        } catch (err) { 
+           return console.log(err);
+        }
+    }
+    
+    const getRate = async () =>{
+        try {
+            if(movie){
+                const res = await axios.get(`/movie/getrate/${id}`)
+                setrate(res.data.rate)
+                console(res.data.rate)
             }
         } catch (err) { 
            return console.log(err);
@@ -86,6 +107,7 @@ function MovieDetail(props) {
             getNewslate(id)
             getMovieRelate(id)
             getReviewrelate()
+            getRate()
             
             axios.post('/comment/getComments', { movieId: res.data._id})
             .then(response => {
@@ -117,7 +139,8 @@ function MovieDetail(props) {
                                                 ))}
                     <p/>
                     {movie.overview}<p/>
-                    <Button>Add Your Rate</Button>: <Rate allowHalf disabled defaultValue={2.5} /><p/>
+                    <Button onClick={()=>{setvis()}}>Add Your Rate</Button>: <Rate allowHalf disabled value={rate} /><p/>
+                    <AddRate visible={modalvis} handle={setvis} Movie_id={id} user_id={user._id}/>
                     <div className='likedislike'>
                         <LikeDislikes video videoId={id} userId={user._id} /> <a href="#trailer"><PlayCircleOutlined/>Trailer</a>
                         <a href='#comment'> Comment<p/></a>

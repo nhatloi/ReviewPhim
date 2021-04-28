@@ -8,6 +8,10 @@ router.get('/fetchMovieDetailTheaters',moviesCtrl.DetailMovieMovieTheaters)
 router.get('/searchTheaters',moviesCtrl.SearchMovie)
 
 router.post('/addmovie',auth,authAdmin, moviesCtrl.AddMovie)
+
+router.post('/postrate',auth, moviesCtrl.PostRate)
+router.get('/getrate/:id', moviesCtrl.GetRate)
+
 router.post('/updatemovie',auth,authAdmin, moviesCtrl.UpdateMovie)
 router.get('/getallmovie', moviesCtrl.GetAllMovie)
 router.get('/getmoviebyid/:id',moviesCtrl.GetMovieById)
