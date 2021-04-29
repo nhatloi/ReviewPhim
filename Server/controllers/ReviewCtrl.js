@@ -6,6 +6,7 @@ const Review = require('../models/Review');
 const User = require('../models/user');
 const Session = require('../models/Session');
     const fs = require("fs");
+const Movie = require('../models/Movie');
 const url= "https://www.gocdienanh.com/review-phim/"
 const url2= "https://reviewchodzui.com/category/phim-viet-nam/"
 
@@ -64,6 +65,8 @@ const ReviewCtrl = {
             if($(e).find('img').attr('class'))
                 review.content.push(`(img) ${$(e).find('img').attr('src')}`);
             })
+            review.content.push('Copyright © 2021 Notus')
+
 
             var text = review.content;
             var stopwords = fs.readFileSync('stopwords.txt');
@@ -127,7 +130,7 @@ const ReviewCtrl = {
                 if($(e).find('img').attr('loading') == 'lazy')
                     review.content.push(`(img) ${$(e).find('img').attr('src')}`);
                 })
-            review.content.pop();
+            review.content.push('copyright: https://reviewchodzui.com');
 
             var text = review.content;
             var stopwords = fs.readFileSync('stopwords.txt');
@@ -273,6 +276,35 @@ const ReviewCtrl = {
         try {
             await Review.findByIdAndUpdate({_id:req.params.id},{state:true})
             res.json({msg:'Active Review successfully!'})
+        } catch (error) {
+            return res.status(500).json({msg: error.message})
+        }
+    },
+
+    SearchReview : async (req,res) =>{
+        try {
+            const query = req.query.search
+
+            const reviews =  await Review.aggregate([{
+                $search: {
+                  text: {
+                    query: query, 
+                    path:['keywords','description']
+                  }, 
+     
+                }
+              }])
+            
+            const movie =  await Movie.aggregate([{
+                $search: {
+                  text: {
+                    query: query, 
+                    path: ['title','original_title','actors']
+                  },      
+                }
+              }])
+
+            res.json({reviews:reviews,movies:movie})
         } catch (error) {
             return res.status(500).json({msg: error.message})
         }

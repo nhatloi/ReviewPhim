@@ -3,7 +3,9 @@ const ReviewCtrl = require('../controllers/ReviewCtrl')
 const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
 
+
 router.get('/getallreviews',auth,authAdmin, ReviewCtrl.GetallReview)
+router.get('/searchreview', ReviewCtrl.SearchReview)
 router.get('/getlistreviews', ReviewCtrl.GetlistReview)
 router.get('/getreviews', ReviewCtrl.GetReviewsKhenphim)
 router.get('/getdetail', ReviewCtrl.GetDetailReviewKhenphim)

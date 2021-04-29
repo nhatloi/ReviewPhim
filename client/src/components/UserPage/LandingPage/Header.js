@@ -45,6 +45,14 @@ function NavHeader() {
         setvisible (!visible)
     }
 
+    const onSearch = async(e) =>{
+      if(e){
+        window.location.href=`/search?${e}`;
+      }
+        
+  }
+
+
     const menu = (
         <Menu>
           <Menu.Item key="0">
@@ -102,7 +110,7 @@ function NavHeader() {
             allowClear
             enterButton="Search"
             size="large"
-            // onSearch={onSearch}
+            onSearch={onSearch}
           />
           </div>
           {isLogged?userInfor()

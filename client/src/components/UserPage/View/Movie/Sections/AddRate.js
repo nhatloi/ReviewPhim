@@ -24,7 +24,7 @@ function AddRate(props) {
 
     return (
         <div>
-            <Modal title="Basic Modal"
+            <Modal title="Post Rate"
              visible={visible} 
             onOk={handleOk}
             onCancel={handle}

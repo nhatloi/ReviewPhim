@@ -320,8 +320,6 @@ const moviesCtrl = {
             return res.status(500).json({msg: error.message})
         }
     },
-    
-
 
 }
 

@@ -20,6 +20,7 @@ import Footer from '../../Footers/Footer'
 import MovieDetail from '../View/Movie/MovieDetail'
 import Detail from '../View/Movie/Detail'
 import Totalmovie from '../View/Movie/Totalmovie'
+import Search from '../View/Search'
 
 
 function Body() {
@@ -58,6 +59,7 @@ function Body() {
                         <Route exact path="/movietest" component={Detail}/>
 
                         <Route exact path="/movie" component={Totalmovie}/>
+                        <Route exact path="/search" component={Search}/>
 
 
                         

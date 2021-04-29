@@ -111,9 +111,7 @@ function Profile() {
                         loading={
                             inforUser.name?false:true
                         }>
-                            <div className='banner' style={{backgroundImage:`url(${banner})`}}></div>
-
-                            <div className ='infor'>
+                            <div >
                                     <Divider orientation="left">
                                         <div className='avatar'>
                                             <img alt='' src = {inforUser.avatar?inforUser.avatar:false}/>
