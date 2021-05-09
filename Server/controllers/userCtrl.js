@@ -8,7 +8,6 @@ const {google} = require('googleapis')
 const {OAuth2} = google.auth
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 const fetch = require('node-fetch')
-const { findOneAndUpdate } = require('../models/user')
 
 const CLIENT_URL = process.env.CLIENT_URL
 const saltOrRounds = 10
@@ -176,6 +175,26 @@ const userCtrl = {
               name,avatar
           })
           res.json({msg:'update success!'})
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+
+    changepwadmin :async (req,res) =>{
+        try{
+        const {old_pw,password,_id} =req.body
+        
+        const user = await Users.findById(_id)
+        if(user){
+            const isMatch = await bcrypt.compare(old_pw, user.password)
+            if(!isMatch) return res.status(400).json({msg:'wrong password!'})
+            const hash = await bcrypt.hash(password,saltOrRounds)
+            await Users.findOneAndUpdate({_id:_id},{
+                password:hash
+              })
+            res.json({msg:'update success!'})
+        }
+        else res.json({msg:'update fail!'})
         }catch(err){
             return res.status(500).json({msg: err.message})
         }

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
-import { Menu} from 'antd';
+import { Input, Menu} from 'antd';
 import {PoweroffOutlined,
     VideoCameraOutlined,
     FundOutlined,
@@ -32,6 +32,7 @@ function LeftMenu() {
                     <Menu.Item key="news" icon={<FundOutlined />}><a href='/adm/news'/>News</Menu.Item>
                     <Menu.Item key="Review" icon={<ForwardOutlined />}><a href='/adm/review'/>Review</Menu.Item>
                     <Menu.Item key="advertisement" icon={<FundViewOutlined />}><a href='/adm/advertisement'/>Advertisement</Menu.Item>
+                    <Menu.Item key="changepw"><a href='/adm/changepw'/>Change Password</Menu.Item>
                 <Menu.Item onClick={handleLogout} key="logout" icon={<PoweroffOutlined />}>
                     Logout
                     </Menu.Item>

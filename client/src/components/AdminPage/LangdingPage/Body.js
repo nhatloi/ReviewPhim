@@ -5,6 +5,7 @@ import Account from '../Body/Account'
 import Movie from '../Body/Movie'
 import News from '../Body/News'
 import Review from '../Body/Review'
+import ChangePassword from '../Body/ChangePassword'
 
 function Body() {
     return (
@@ -15,6 +16,7 @@ function Body() {
                     <Route exact path="/adm/movies" component={Movie}/>
                     <Route exact path="/adm/news" component={News}/>
                     <Route exact path="/adm/review" component={Review}/>
+                    <Route exact path="/adm/changepw" component={ChangePassword}/>
                     <Route exact path="/" component={Account}/>
                 </Switch>
         </div>

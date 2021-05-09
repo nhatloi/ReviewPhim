@@ -12,7 +12,9 @@ const movie = new mongoose.Schema({
     original_title: {
         type: String,
     },
-    catogory: String,
+    catogory: {
+        type:String,
+    },
     overview: {
         type:String
     },

@@ -81,31 +81,31 @@ const ReviewCtrl = {
 
 
 
-     GetReviewsKhenphim : async (req,res) =>{
-        const page = req.header("page")
-       try{
-            const content = await fetchData(`${url2}page/${page}/`)
-            const $ =cheerio.load(content)
-            const reviews=[]
+    //  GetReviewsKhenphim : async (req,res) =>{
+    //     const page = req.header("page")
+    //    try{
+    //         const content = await fetchData(`${url2}page/${page}/`)
+    //         const $ =cheerio.load(content)
+    //         const reviews=[]
 
-            const article = $('.inner-wrapper');
-            $('.article-wrap-inner').each((i,e)=>{
-                const source = $(e).find('.featured-thumb>a').attr('href');
-                const img = $(e).find('.featured-thumb>a>img').attr('src');
-                const description = $(e).find('.content-wrap-inner>header.entry-header>h3').text();
-                oneReview ={
-                    description:description,
-                    source:source,
-                    img:img,
-                }
-                reviews.push(oneReview)
-            })
+    //         const article = $('.inner-wrapper');
+    //         $('.article-wrap-inner').each((i,e)=>{
+    //             const source = $(e).find('.featured-thumb>a').attr('href');
+    //             const img = $(e).find('.featured-thumb>a>img').attr('src');
+    //             const description = $(e).find('.content-wrap-inner>header.entry-header>h3').text();
+    //             oneReview ={
+    //                 description:description,
+    //                 source:source,
+    //                 img:img,
+    //             }
+    //             reviews.push(oneReview)
+    //         })
             
-            res.json({reivew:reviews})
-        } catch (error) {
-            return res.status(500).json({msg: error.message})
-        }
-    },
+    //         res.json({reivew:reviews})
+    //     } catch (error) {
+    //         return res.status(500).json({msg: error.message})
+    //     }
+    // },
 
     GetDetailReviewKhenphim : async (req,res) =>{
         const url = req.header("url")
@@ -120,9 +120,9 @@ const ReviewCtrl = {
                 keywords:[],
               };
         
-            review.title = $('header.entry-header').find('h1').text();
-            review.post_date = $('header.entry-header').find('time.entry-date').text();
-            review.description = $('.entry-content > blockquote').find('strong').text();
+            review.title = $('header.td-post-title').find('h1.entry-title').text();
+            review.post_date = $('header.td-post-title').find('time.entry-date').text();
+            review.description = $('header.td-post-title').find('p.td-post-sub-title').text();
             $('p').filter((i,e)=>{
                 if($(e).attr('style') === 'text-align: justify;'){
                     review.content.push($(e).text());
@@ -130,7 +130,7 @@ const ReviewCtrl = {
                 if($(e).find('img').attr('loading') == 'lazy')
                     review.content.push(`(img) ${$(e).find('img').attr('src')}`);
                 })
-            review.content.push('copyright: https://reviewchodzui.com');
+            review.content.push(`copyright: ${url}`);
 
             var text = review.content;
             var stopwords = fs.readFileSync('stopwords.txt');

@@ -23,6 +23,8 @@ router.get('/logout', userCtrl.logout)
 
 router.patch('/update',auth, userCtrl.updateUser)
 
+router.post('/changepwadm',auth,authAdmin, userCtrl.changepwadmin)
+
 router.delete('/delete/:id',auth,authAdmin,userCtrl.deleteUser)
 
 router.post('/google_login', userCtrl.googleLogin)
@@ -32,5 +34,6 @@ router.post('/facebook_login', userCtrl.facebookLogin)
 router.get('/getsession/',userCtrl.GetSessionUser)
 
 router.post('/postsession',auth,userCtrl.PostSession)
+
 
 module.exports = router
